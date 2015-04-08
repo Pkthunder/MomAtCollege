@@ -1,9 +1,10 @@
 package androiddev.jared.momatcollege;
 
-import android.app.Activity;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +18,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 
-public class AddHomework extends Activity {
+public class AddHomework extends ActionBarActivity {
 
     private EditText dueDateText;
     private EditText dueTimeText;

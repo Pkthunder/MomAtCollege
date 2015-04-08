@@ -1,11 +1,11 @@
 package androiddev.jared.momatcollege;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.drawable.Drawable;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 
-public class AddClass extends Activity {
+public class AddClass extends ActionBarActivity {
 
     //////////////////////////////////////////////////////////  Days of the Week Picker Variables   /////////////////////////////////////////////////////////////
     private TextView mMonPicker = null;
