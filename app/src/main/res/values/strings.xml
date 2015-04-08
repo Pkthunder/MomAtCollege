@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mom At College</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Titles -->
+    <string name="title_activity_add_class">Add A Class</string>
+    <string name="title_activity_add_homework">Add A Homework</string>
+    <string name="title_activity_add_test">Add A Test</string>
+    <string name="add_class_title">Add A Class</string>
+    <string name="add_homework_title">Add A Homework</string>
+    <string name="add_test_title">Add A Test</string>
+    <string name="time_date_dialog_title">Date / Time</string>
+    <string name="weekday_dialog_title">Select The Days</string>
+
+    <!-- ********************************************************************** Add a Class ************************************************************ -->
+    <string name="class_name_hint">Class Name</string>
+    <string name="location_hint">Location (Classroom, Building, etc)</string>
+    <string name="teacher_name_hint">Teacher Name</string>
+    <string name="teacher_notes_hint">Teacher Notes (Email, Office Hours, etc)</string>
+    <string name="date_picker_label">Frequency</string>
+    <string name="days_text">Days</string>
+    <string name="Mon">Mon</string>
+    <string name="Tue">Tue</string>
+    <string name="Wed">Wed</string>
+    <string name="Thr">Thr</string>
+    <string name="Fri">Fri</string>
+    <string name="Sat">Sat</string>
+    <string name="Sun">Sun</string>
+    <string name="start_time_label">Start Time</string>
+    <string name="end_time_label">End Time</string>
+    <string name="start_date_label">Start Date</string>
+    <string name="end_date_label">End Date</string>
+    <string name="alarm_label">Automatic Alarms</string>
+    <string name="class_type_text">Type of Class</string>
+
+    <string-array name="testing">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="class_types">
+        <item>Lecture</item>
+        <item>Recitation</item>
+        <item>Lab</item>
+    </string-array>
+
+    <!-- ******************************************************************** Add a Homework ********************************************************** -->
+
+    <string name="homework_name_hint">Homework Name</string>
+    <string name="homework_notes_hint">Notes (optional)</string>
+    <string name="homework_due_date_label">Due Date / Time</string>
+
+    <!-- ******************************************************************** Add a Test ********************************************************** -->
+
+    <string name="test_name_hint">Test Name</string>
+    <string name="test_notes_hint">Notes (optional)</string>
+    <string name="test_date_label">Test Date / Time</string>
+
+</resources>

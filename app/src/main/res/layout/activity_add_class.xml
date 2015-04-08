@@ -1,0 +1,378 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:paddingLeft="15dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".AddClass"
+        android:weightSum="1"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/TitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_class_title"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+
+        <!-- Class Name Text Input -->
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/classNameInput"
+            android:hint="@string/class_name_hint"
+            android:inputType="textShortMessage"
+            android:layout_marginTop="15dp"
+            android:singleLine="true" />
+
+        <!-- Location Text Input -->
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationInput"
+            android:hint="@string/location_hint"
+            android:inputType="textShortMessage"
+            android:layout_marginTop="15dp"
+            android:singleLine="true" />
+
+        <!-- Teacher Name Text Input -->
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teacherNameInput"
+            android:hint="@string/teacher_name_hint"
+            android:inputType="textShortMessage"
+            android:layout_marginTop="15dp"
+            android:singleLine="true" />
+
+        <!-- Teacher Notes Text Input -->
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teacherNotesInput"
+            android:hint="@string/teacher_notes_hint"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:layout_marginTop="15dp" />
+
+        <!-- Days Dialog Input/Button -->
+        <!--
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/daysInput"
+            android:prompt="@string/days_text"
+            android:text="@string/days_text"
+            android:hint="@string/days_text"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:spinnerMode="dialog"
+            android:entries="@array/testing"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/date_picker_label"
+            android:id="@+id/datePickerLabel"
+            android:singleLine="true"
+            android:layout_marginTop="15dp" />
+
+        <!-- Day Picker Layout -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Mon"
+                android:id="@+id/textMon"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Tue"
+                android:id="@+id/textTue"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Wed"
+                android:id="@+id/textWed"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Thr"
+                android:id="@+id/textThr"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Fri"
+                android:id="@+id/textFri"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Sat"
+                android:id="@+id/textSat"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/Sun"
+                android:id="@+id/textSun"
+                android:layout_weight=".14"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+        </LinearLayout> <!-- End of Day Picker Layout -->
+
+        <!-- Class Time Label Layout -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="-5dp">
+
+            <TextView
+                android:id="@+id/startTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="top|left"
+                android:singleLine="true"
+                android:text="@string/start_time_label"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/endTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="top|right"
+                android:singleLine="true"
+                android:text="@string/end_time_label"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout> <!-- End of Class Time Label Layout -->
+
+        <!-- Class Time Picker Layout -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_margin="0dp">
+
+           <!--
+            <TimePicker
+                android:id="@+id/startTimeInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="bottom|left" />
+
+            <TimePicker
+                android:id="@+id/endTimeInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="bottom|right" />
+            -->
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="left"
+                android:hint="Start Time"
+                android:id="@+id/fromTimeEditText" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="right"
+                android:hint="End Time"
+                android:id="@+id/toTimeEditText" />
+
+        </LinearLayout> <!-- End of Class Time Picker Layout -->
+
+        <!-- Semester Date Label Layout -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="-5dp">
+
+            <TextView
+                android:id="@+id/startDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="top|left"
+                android:singleLine="true"
+                android:text="@string/start_date_label"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/endDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="top|right"
+                android:singleLine="true"
+                android:text="@string/end_date_label"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </LinearLayout> <!-- End of Semester Date Label Layout -->
+
+        <!-- Semester Date Picker Layout -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_margin="0dp">
+
+        <!--
+            <DatePicker
+                android:id="@+id/startDateInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="bottom|left" />
+
+            <DatePicker
+                android:id="@+id/endDateInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:layout_gravity="bottom|right" />
+        -->
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="left"
+                android:hint="Start Date"
+                android:id="@+id/fromDateEditText" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="right"
+                android:hint="End Date"
+                android:id="@+id/toDateEditText" />
+
+
+        </LinearLayout> <!-- End of Semester Date Picker Layout -->
+
+        <CheckBox
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alarm_label"
+            android:id="@+id/alarmInput"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <!-- Class Type Input -->
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/classTypeInput"
+            android:prompt="@string/class_type_text"
+            android:text="@string/class_type_text"
+            android:hint="@string/class_type_text"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:spinnerMode="dialog"
+            android:entries="@array/class_types"
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+        <!-- TEMPORARY -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_margin="0dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="left"
+                android:text="Add Homework"
+                android:id="@+id/addHwBtn" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="right"
+                android:text="Add Test"
+                android:id="@+id/addTestBtn" />
+
+        </LinearLayout> <!-- End of TEMPORARY -->
+
+
+    </LinearLayout>
+</ScrollView>
