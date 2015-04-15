@@ -66,5 +66,6 @@
     <string name="test_name_hint">Test Name</string>
     <string name="test_notes_hint">Notes (optional)</string>
     <string name="test_date_label">Test Date / Time</string>
+    <string name="title_activity_add_calendar">AddCalendar</string>
 
 </resources>
