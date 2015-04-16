@@ -132,29 +132,29 @@ public class ViewClass extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
 
-        //TODO: Switch cases will add a new homework test
+        //DONE: Switch cases will add a new homework, test, and schedule
         switch (item.getItemId()) {
             case R.id.add_a_class:
-                mainActivity();
+                addAClass();
                 return true;
             case R.id.view_schedule:
                 schedule();
                 return true;
             case R.id.add_a_homework:
                 homework();
-                // yo yo yo!!!!!!
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void mainActivity(){
-        Intent intent = new Intent(ViewClass.this, MainActivity.class);
+    public void addAClass(){
+        //DONE: Intent to navigate to add a class
+        Intent intent = new Intent(ViewClass.this, AddClass.class);
         startActivity(intent);
     }
 
     public void schedule(){
-        //TODO: Intent to navigate to view schedule
+        //DONE: Intent to navigate to view schedule
 
         Intent intent = new Intent(ViewClass.this, AddCalendar.class);
         startActivity(intent);
@@ -162,7 +162,7 @@ public class ViewClass extends ActionBarActivity {
     }
 
     public void homework(){
-        //TODO: Intent to navigate to add a homework
+        //DONE: Intent to navigate to add a homework
 
         Intent intent = new Intent(ViewClass.this, AddHomework.class);
         startActivity(intent);
