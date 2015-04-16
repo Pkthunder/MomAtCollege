@@ -73,6 +73,16 @@ public class AddClass extends ActionBarActivity {
             }
         });
 
+        //Temporary - Navigate to Add A Calendar
+        Button addCalendar = (Button) findViewById(R.id.addCalBtn);
+        addCalendar.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddClass.this, AddCalendar.class);
+                startActivity(intent);
+            }
+        });
+
 
         //////////////////////////////////////////////////////////  Days of the week picker functionality   /////////////////////////////////////////////////////////////
         weekdayBorder = getResources().getDrawable(R.drawable.text_view_border);

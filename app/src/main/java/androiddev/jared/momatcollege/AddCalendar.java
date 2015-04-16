@@ -3,7 +3,6 @@ package androiddev.jared.momatcollege;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -55,11 +54,11 @@ public class AddCalendar extends ActionBarActivity {
 
 
 
-        calendarCheck();
-        // calendarCreate();
+        //calendarCheck();
+         calendarCreate();
 
         //checkForEvent();
-        modifyDisplayName();
+        //modifyDisplayName();
         //addEventHopefully();
     }
 

@@ -371,6 +371,16 @@
                 android:text="Add Test"
                 android:id="@+id/addTestBtn" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_gravity="right"
+                android:text="Add Calendar"
+                android:id="@+id/addCalBtn" />
+
+
+
         </LinearLayout> <!-- End of TEMPORARY -->
 
 
