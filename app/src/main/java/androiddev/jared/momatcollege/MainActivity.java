@@ -23,13 +23,24 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button view_schedule_button = (Button) findViewById(R.id.add_a_class);
-        view_schedule_button.setOnClickListener(new View.OnClickListener() {
+        Button add_a_class_button = (Button) findViewById(R.id.add_a_class);
+        add_a_class_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //TODO: Navigate to Calendar to view the schedule
+                //DONE: Navigate to Add a class
                 Intent intent = new Intent( MainActivity.this , AddClass.class );
+                startActivity(intent);
+
+            }
+        });
+
+        Button view_schedule_button = (Button) findViewById(R.id.view_schedule);
+        view_schedule_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+                Intent intent = new Intent( MainActivity.this, AddCalendar.class );
                 startActivity(intent);
 
             }
@@ -115,6 +126,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void schedule(){
         //TODO: Intent to navigate to view the schedule
-        Intent intent = new Intent(MainActivity.this, AddHomework.class);
+        Intent intent = new Intent(MainActivity.this, AddCalendar.class);
+        startActivity(intent);
     }
 }

@@ -156,6 +156,9 @@ public class ViewClass extends ActionBarActivity {
     public void schedule(){
         //TODO: Intent to navigate to view schedule
 
+        Intent intent = new Intent(ViewClass.this, AddCalendar.class);
+        startActivity(intent);
+
     }
 
     public void homework(){
