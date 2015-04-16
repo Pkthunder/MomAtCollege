@@ -4,6 +4,17 @@
     <string name="app_name">Mom At College</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="add_a_homework">Add A Homework</string>
+    <string name="add_a_class">Add A Class</string>
+    <string name="view_schedule">View Schedule</string>
+    <string name="teacher">Teacher:</string>
+    <string name="location">Location:</string>
+    <string name="office_hours">Office Hours:</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="frequency">When:</string>
+    <string name="action_search">Search</string>
+    <string name="action_schedule">Schedule</string>
+
 
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
@@ -67,5 +78,7 @@
     <string name="test_notes_hint">Notes (optional)</string>
     <string name="test_date_label">Test Date / Time</string>
     <string name="title_activity_add_calendar">AddCalendar</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_view_class">ViewClass</string>
 
 </resources>

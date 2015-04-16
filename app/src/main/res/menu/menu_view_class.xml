@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Search / will display always -->
+    <item android:id="@+id/view_schedule"
+        android:icon="@mipmap/ic_schedule"
+        android:title="@string/action_schedule"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Add A Class Button -->
+    <item android:id="@+id/add_a_class"
+        android:icon="@mipmap/ic_add"
+        android:title="@string/add_a_class"
+        app:showAsAction="ifRoom" />
+
+    <!-- Add A Homework Button -->
+    <item android:id="@+id/add_a_homework"
+        android:icon="@mipmap/ic_homework"
+        android:title="@string/add_a_homework"
+        app:showAsAction="ifRoom" />
+
+    <!--
+        &lt;!&ndash; Settings &ndash;&gt;
+        <item android:id="@+id/action_settings"
+            android:icon="@mipmap/ic_settings"
+            android:title="@string/action_settings"
+            app:showAsAction="ifRoom" />-->
+
+</menu>
