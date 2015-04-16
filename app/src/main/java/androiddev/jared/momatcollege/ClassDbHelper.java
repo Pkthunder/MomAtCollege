@@ -11,8 +11,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     public static final String[] VAL_NAMES= {"id", "class_name", "location", "teacher_name",
             "teacher_notes", "frequency", "start_date_time", "end_date_time", "class_type"};
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "MomAtCollegeDb";
-    private static final String CLASS_TABLE_NAME = "classDb";
+    public static final String DB_NAME = "MomAtCollegeDb";
+    public static final String CLASS_TABLE_NAME = "classDb";
     /*private static final String CLASS_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE_NAME + " (" +
             "id int(6) NOT NULL auto_increment, " +

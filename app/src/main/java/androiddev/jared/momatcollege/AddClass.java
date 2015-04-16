@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 
@@ -53,8 +52,8 @@ public class AddClass extends ActionBarActivity {
     private TimePickerDialog toTimePickerDialog;
     private DateFormat mTimeFormat;
 
-    private Calendar fromDateTime;
-    private Calendar toDateTime;
+    //private Calendar fromDateTime;
+    //private Calendar toDateTime;
     private String errorMsg;
 
     @Override
@@ -123,10 +122,11 @@ public class AddClass extends ActionBarActivity {
                 SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
 
-                if ( !addDatabaseEntry(mDb, values) ) {
+                if ( !addDatabaseEntry(values) ) {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), errorMsg + " Successfully Added!", Toast.LENGTH_LONG).show();
+                    long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
+                    Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -297,7 +297,7 @@ public class AddClass extends ActionBarActivity {
         });
     }
 
-    private boolean addDatabaseEntry( SQLiteDatabase mDb, ContentValues values ) {
+    private boolean addDatabaseEntry( ContentValues values ) {
 
         //Class Name
         EditText className = (EditText) findViewById(R.id.classNameInput);
