@@ -2,6 +2,8 @@ package androiddev.jared.momatcollege;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +15,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -47,6 +52,10 @@ public class AddClass extends ActionBarActivity {
     private TimePickerDialog fromTimePickerDialog;
     private TimePickerDialog toTimePickerDialog;
     private DateFormat mTimeFormat;
+
+    private Calendar fromDateTime;
+    private Calendar toDateTime;
+    private String errorMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,77 @@ public class AddClass extends ActionBarActivity {
 
 
         //////////////////////////////////////////////////////////  Days of the week picker functionality   /////////////////////////////////////////////////////////////
+        setWeekdayPicker();
+
+        //////////////////////////////////////////////////////////  Date Picker Dialog Functionality   /////////////////////////////////////////////////////////////
+        mDateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
+        mTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, Locale.US);
+
+        fromDateText = (EditText) findViewById(R.id.fromDateEditText);
+        fromDateText.setInputType(InputType.TYPE_NULL);
+        toDateText = (EditText) findViewById(R.id.toDateEditText);
+        toDateText.setInputType(InputType.TYPE_NULL);
+
+        fromTimeText = (EditText) findViewById(R.id.fromTimeEditText);
+        fromTimeText.setInputType(InputType.TYPE_NULL);
+        toTimeText = (EditText) findViewById(R.id.toTimeEditText);
+        toTimeText.setInputType(InputType.TYPE_NULL);
+
+        setDateDialogs();
+        setTimeDialogs();
+
+        ///////////////////////////////////////////////////////////////////  Database Functionality   /////////////////////////////////////////////////////////////////
+        final ClassDbHelper mDbHelper = new ClassDbHelper(getApplicationContext());
+
+        Button doneBtn = (Button) findViewById(R.id.doneBtn);
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+
+                if ( !addDatabaseEntry(mDb, values) ) {
+                    Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), errorMsg + " Successfully Added!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_class, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void toggleWeekdayClick(TextView weekday) {
+        if (weekday.getBackground() == null) {
+            weekday.setBackground(weekdayBorder);
+        } else {
+            weekday.setBackground(null);
+        }
+    }
+
+    private void setWeekdayPicker() {
         weekdayBorder = getResources().getDrawable(R.drawable.text_view_border);
 
         mMonPicker = (TextView) findViewById(R.id.textMon);
@@ -143,55 +223,6 @@ public class AddClass extends ActionBarActivity {
                 weekdaySelections[6] = !(weekdaySelections[6]);
             }
         });
-
-        //////////////////////////////////////////////////////////  Date Picker Dialog Functionality   /////////////////////////////////////////////////////////////
-        mDateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
-        mTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, Locale.US);
-
-        fromDateText = (EditText) findViewById(R.id.fromDateEditText);
-        fromDateText.setInputType(InputType.TYPE_NULL);
-        toDateText = (EditText) findViewById(R.id.toDateEditText);
-        toDateText.setInputType(InputType.TYPE_NULL);
-
-        fromTimeText = (EditText) findViewById(R.id.fromTimeEditText);
-        fromTimeText.setInputType(InputType.TYPE_NULL);
-        toTimeText = (EditText) findViewById(R.id.toTimeEditText);
-        toTimeText.setInputType(InputType.TYPE_NULL);
-
-        setDateDialogs();
-        setTimeDialogs();
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_class, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void toggleWeekdayClick(TextView weekday) {
-        if (weekday.getBackground() == null) {
-            weekday.setBackground(weekdayBorder);
-        } else {
-            weekday.setBackground(null);
-        }
     }
 
     private void setDateDialogs() {
@@ -264,5 +295,65 @@ public class AddClass extends ActionBarActivity {
                 toTimePickerDialog.show();
             }
         });
+    }
+
+    private boolean addDatabaseEntry( SQLiteDatabase mDb, ContentValues values ) {
+
+        //Class Name
+        EditText className = (EditText) findViewById(R.id.classNameInput);
+        if (className.getText().toString().equals("")) {
+            errorMsg = "Please Enter A Class Name";
+            return false;
+        }
+        values.put(ClassDbHelper.VAL_NAMES[1], className.getText().toString());
+
+        //Location
+        EditText location = (EditText) findViewById(R.id.locationInput);
+        if (location.getText().toString().equals("")) {
+            errorMsg = "Please Enter A Class Location";
+            return false;
+        }
+        values.put(ClassDbHelper.VAL_NAMES[2], location.getText().toString());
+
+        //Teacher Name
+        EditText teacherName = (EditText) findViewById(R.id.teacherNameInput);
+        if (teacherName.getText().toString().equals("")) {
+            errorMsg = "Please Enter A Teacher's Name";
+            return false;
+        }
+        values.put(ClassDbHelper.VAL_NAMES[3], teacherName.getText().toString());
+
+        //Teacher Notes
+        EditText teacherNotes = (EditText) findViewById(R.id.teacherNotesInput);
+        values.put(ClassDbHelper.VAL_NAMES[4], teacherNotes.getText().toString());
+
+        //Frequency
+        String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+        String frequency = "";
+        for (int i=0; i<7; i++) {
+            if (weekdaySelections[i]) {
+                frequency += weekday_key[i];
+            }
+        }
+        if (frequency.equals("")) {
+            errorMsg = "Please Select The Weekdays Your Class Occurs";
+            return false;
+        }
+        values.put(ClassDbHelper.VAL_NAMES[5], frequency);
+
+        //Start Date and Time
+            //TODO: this
+            values.put(ClassDbHelper.VAL_NAMES[6], "2015-04-15 14:23:45"); //temp hardcoded
+
+        //End Date and Time
+            //TODO: this
+            values.put(ClassDbHelper.VAL_NAMES[7], "2015-04-20 10:23:45"); //temp hardcoded
+
+        //Class Type
+        Spinner classType = (Spinner) findViewById(R.id.classTypeInput);
+        values.put(ClassDbHelper.VAL_NAMES[8], classType.getSelectedItem().toString());
+
+        errorMsg = className.getText().toString();
+        return true;
     }
 }
