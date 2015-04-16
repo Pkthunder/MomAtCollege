@@ -55,10 +55,10 @@ public class AddCalendar extends ActionBarActivity {
 
 
         //calendarCheck();
-         calendarCreate();
+         //calendarCreate();
 
         //checkForEvent();
-        //modifyDisplayName();
+        modifyDisplayName();
         //addEventHopefully();
     }
 
