@@ -61,21 +61,6 @@
             android:layout_marginTop="15dp" />
 
         <!-- Days Dialog Input/Button -->
-        <!--
-        <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/daysInput"
-            android:prompt="@string/days_text"
-            android:text="@string/days_text"
-            android:hint="@string/days_text"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="25dp"
-            android:spinnerMode="dialog"
-            android:entries="@array/testing"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        -->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -218,27 +203,14 @@
             android:padding="0dp"
             android:layout_margin="0dp">
 
-           <!--
-            <TimePicker
-                android:id="@+id/startTimeInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".4"
-                android:layout_gravity="bottom|left" />
 
-            <TimePicker
-                android:id="@+id/endTimeInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".4"
-                android:layout_gravity="bottom|right" />
-            -->
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".35"
                 android:layout_gravity="left"
                 android:hint="Start Time"
+                android:focusableInTouchMode="false"
                 android:id="@+id/fromTimeEditText" />
 
             <EditText
@@ -247,6 +219,7 @@
                 android:layout_weight=".35"
                 android:layout_gravity="right"
                 android:hint="End Time"
+                android:focusableInTouchMode="false"
                 android:id="@+id/toTimeEditText" />
 
         </LinearLayout> <!-- End of Class Time Picker Layout -->
@@ -290,28 +263,13 @@
             android:padding="0dp"
             android:layout_margin="0dp">
 
-        <!--
-            <DatePicker
-                android:id="@+id/startDateInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".4"
-                android:layout_gravity="bottom|left" />
-
-            <DatePicker
-                android:id="@+id/endDateInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".4"
-                android:layout_gravity="bottom|right" />
-        -->
-
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".35"
                 android:layout_gravity="left"
                 android:hint="Start Date"
+                android:focusableInTouchMode="false"
                 android:id="@+id/fromDateEditText" />
 
             <EditText
@@ -320,6 +278,7 @@
                 android:layout_weight=".35"
                 android:layout_gravity="right"
                 android:hint="End Date"
+                android:focusableInTouchMode="false"
                 android:id="@+id/toDateEditText" />
 
 
@@ -347,14 +306,6 @@
             android:entries="@array/class_types"
             android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="Done"
-            android:id="@+id/doneBtn" />
-
-
-        <!-- TEMPORARY -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -367,29 +318,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".35"
+                android:layout_gravity="right"
+                android:text="Cancel"
+                android:id="@+id/cancelBtn" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
                 android:layout_gravity="left"
-                android:text="Add Homework"
-                android:id="@+id/addHwBtn" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".35"
-                android:layout_gravity="right"
-                android:text="Add Test"
-                android:id="@+id/addTestBtn" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".35"
-                android:layout_gravity="right"
-                android:text="Add Calendar"
-                android:id="@+id/addCalBtn" />
+                android:text="Done"
+                android:id="@+id/doneBtn" />
 
 
-
-        </LinearLayout> <!-- End of TEMPORARY -->
+        </LinearLayout>
 
 
     </LinearLayout>

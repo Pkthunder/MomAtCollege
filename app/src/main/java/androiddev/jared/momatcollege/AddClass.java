@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
@@ -21,8 +20,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 
 public class AddClass extends ActionBarActivity {
@@ -35,7 +34,7 @@ public class AddClass extends ActionBarActivity {
     private TextView mFriPicker = null;
     private TextView mSatPicker = null;
     private TextView mSunPicker = null;
-    private Boolean[] weekdaySelections = { false, false, false, false, false, false, false };
+    private boolean[] weekdaySelections = { false, false, false, false, false, false, false };
     private Drawable weekdayBorder = null;
 
     //////////////////////////////////////////////////////////  Date Picker Dialog Variables   /////////////////////////////////////////////////////////////
@@ -52,8 +51,8 @@ public class AddClass extends ActionBarActivity {
     private TimePickerDialog toTimePickerDialog;
     private DateFormat mTimeFormat;
 
-    //private Calendar fromDateTime;
-    //private Calendar toDateTime;
+    private Calendar startDateTime;
+    private Calendar endDateTime;
     private String errorMsg;
 
     @Override
@@ -61,43 +60,14 @@ public class AddClass extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
 
-        //Temporary - Navigate to Add A Homework
-        Button addHomework = (Button) findViewById(R.id.addHwBtn);
-        addHomework.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddClass.this, AddHomework.class);
-                startActivity(intent);
-            }
-        });
-
-        //Temporary - Navigate to Add A Test
-        Button addTest = (Button) findViewById(R.id.addTestBtn);
-        addTest.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddClass.this, AddTest.class);
-                startActivity(intent);
-            }
-        });
-
-        //Temporary - Navigate to Add A Calendar
-        Button addCalendar = (Button) findViewById(R.id.addCalBtn);
-        addCalendar.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddClass.this, AddCalendar.class);
-                startActivity(intent);
-            }
-        });
-
-
         //////////////////////////////////////////////////////////  Days of the week picker functionality   /////////////////////////////////////////////////////////////
         setWeekdayPicker();
 
         //////////////////////////////////////////////////////////  Date Picker Dialog Functionality   /////////////////////////////////////////////////////////////
-        mDateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
-        mTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, Locale.US);
+        //mDateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
+        //mTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, Locale.US);
+        mDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        mTimeFormat = new SimpleDateFormat("h:mm a");
 
         fromDateText = (EditText) findViewById(R.id.fromDateEditText);
         fromDateText.setInputType(InputType.TYPE_NULL);
@@ -114,6 +84,8 @@ public class AddClass extends ActionBarActivity {
 
         ///////////////////////////////////////////////////////////////////  Database Functionality   /////////////////////////////////////////////////////////////////
         final ClassDbHelper mDbHelper = new ClassDbHelper(getApplicationContext());
+        startDateTime = Calendar.getInstance();
+        endDateTime = Calendar.getInstance();
 
         Button doneBtn = (Button) findViewById(R.id.doneBtn);
         doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -126,8 +98,17 @@ public class AddClass extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 } else {
                     long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
+                    //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        Button cancelBtn = (Button) findViewById(R.id.cancelBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -234,6 +215,9 @@ public class AddClass extends ActionBarActivity {
                 Calendar mDate = Calendar.getInstance();
                 mDate.set(year, monthOfYear, dayOfMonth);
                 fromDateText.setText(mDateFormat.format(mDate.getTime()));
+                startDateTime.set(Calendar.YEAR, year);
+                startDateTime.set(Calendar.MONTH, monthOfYear);
+                startDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -243,6 +227,9 @@ public class AddClass extends ActionBarActivity {
                 Calendar mDate = Calendar.getInstance();
                 mDate.set(year, monthOfYear, dayOfMonth);
                 toDateText.setText(mDateFormat.format(mDate.getTime()));
+                endDateTime.set(Calendar.YEAR, year);
+                endDateTime.set(Calendar.MONTH, monthOfYear);
+                endDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -270,6 +257,8 @@ public class AddClass extends ActionBarActivity {
                 Calendar mDate = Calendar.getInstance();
                 mDate.set(0, 0, 0, hourOfDay, minute);
                 fromTimeText.setText(mTimeFormat.format(mDate.getTime()));
+                startDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                startDateTime.set(Calendar.MINUTE, minute);
             }
         }, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), false);
 
@@ -279,6 +268,8 @@ public class AddClass extends ActionBarActivity {
                 Calendar mDate = Calendar.getInstance();
                 mDate.set(0, 0, 0, hourOfDay, minute);
                 toTimeText.setText(mTimeFormat.format(mDate.getTime()));
+                endDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                endDateTime.set(Calendar.MINUTE, minute);
             }
         }, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), false);
 
@@ -302,7 +293,7 @@ public class AddClass extends ActionBarActivity {
         //Class Name
         EditText className = (EditText) findViewById(R.id.classNameInput);
         if (className.getText().toString().equals("")) {
-            errorMsg = "Please Enter A Class Name";
+            errorMsg = "Please Enter a Class Name";
             return false;
         }
         values.put(ClassDbHelper.VAL_NAMES[1], className.getText().toString());
@@ -310,7 +301,7 @@ public class AddClass extends ActionBarActivity {
         //Location
         EditText location = (EditText) findViewById(R.id.locationInput);
         if (location.getText().toString().equals("")) {
-            errorMsg = "Please Enter A Class Location";
+            errorMsg = "Please Enter a Class Location";
             return false;
         }
         values.put(ClassDbHelper.VAL_NAMES[2], location.getText().toString());
@@ -318,7 +309,7 @@ public class AddClass extends ActionBarActivity {
         //Teacher Name
         EditText teacherName = (EditText) findViewById(R.id.teacherNameInput);
         if (teacherName.getText().toString().equals("")) {
-            errorMsg = "Please Enter A Teacher's Name";
+            errorMsg = "Please Enter a Teacher's Name";
             return false;
         }
         values.put(ClassDbHelper.VAL_NAMES[3], teacherName.getText().toString());
@@ -336,23 +327,41 @@ public class AddClass extends ActionBarActivity {
             }
         }
         if (frequency.equals("")) {
-            errorMsg = "Please Select The Weekdays Your Class Occurs";
+            errorMsg = "Please select the Weekdays your class occurs";
             return false;
         }
         values.put(ClassDbHelper.VAL_NAMES[5], frequency);
 
-        //Start Date and Time
-            //TODO: this
-            values.put(ClassDbHelper.VAL_NAMES[6], "2015-04-15 14:23:45"); //temp hardcoded
-
-        //End Date and Time
-            //TODO: this
-            values.put(ClassDbHelper.VAL_NAMES[7], "2015-04-20 10:23:45"); //temp hardcoded
+        //Start Date and Time && End Date and Time
+        if( fromTimeText.getText().toString().equals("") ) {
+            errorMsg = "Please enter a start time";
+            return false;
+        }
+        if( toTimeText.getText().toString().equals("") ) {
+            errorMsg = "Please enter a end time";
+            return false;
+        }
+        if( fromDateText.getText().toString().equals("") ) {
+            errorMsg = "Please enter a start date";
+            return false;
+        }
+        if( toDateText.getText().toString().equals("") ) {
+            errorMsg = "Please enter a end date";
+            return false;
+        }
+        if (!(startDateTime.before(endDateTime))) {
+            errorMsg = "Please check your start and end date!";
+            return false;
+        }
+        DateFormat mFormat = new SimpleDateFormat("yyy/MM/dd HH:mm:ss");
+        values.put(ClassDbHelper.VAL_NAMES[6], mFormat.format(startDateTime.getTime()));
+        values.put(ClassDbHelper.VAL_NAMES[7], mFormat.format(endDateTime.getTime()));
 
         //Class Type
         Spinner classType = (Spinner) findViewById(R.id.classTypeInput);
         values.put(ClassDbHelper.VAL_NAMES[8], classType.getSelectedItem().toString());
 
+        //Not an error, just using the variable
         errorMsg = className.getText().toString();
         return true;
     }
