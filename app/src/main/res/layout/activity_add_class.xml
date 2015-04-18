@@ -290,7 +290,7 @@
             android:text="@string/alarm_label"
             android:id="@+id/alarmInput"
             android:layout_marginTop="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <!-- Class Type Input -->
         <Spinner
@@ -304,7 +304,9 @@
             android:layout_marginBottom="25dp"
             android:spinnerMode="dialog"
             android:entries="@array/class_types"
-            android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+            style="?android:spinnerItemStyle"
+            android:ellipsize="marquee"
+            android:textSize="30sp"/>
 
         <LinearLayout
             android:orientation="horizontal"

@@ -7,23 +7,38 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:weightSum="1"
     android:orientation="vertical"
-    tools:context="androiddev.jared.momatcollege.AddHomework">
+    tools:context="androiddev.jared.momatcollege.AddTask">
 
     <!-- Title -->
     <TextView
-        android:id="@+id/TitleLabel"
+        android:id="@+id/TaskTitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_homework_title"
+        android:text="@string/add_task_title"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/taskTypeInput"
+        android:prompt="@string/class_type_text"
+        android:text="@string/class_type_text"
+        android:hint="@string/class_type_text"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="25dp"
+        android:spinnerMode="dialog"
+        android:entries="@array/task_type_array"
+        style="?android:spinnerItemStyle"
+        android:ellipsize="marquee"
+        android:textSize="30sp"/>
 
     <!-- Homework Name Input -->
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkNameInput"
-        android:hint="@string/homework_name_hint"
+        android:id="@+id/taskNameInput"
+        android:hint="@string/task_name_hint"
         android:inputType="textShortMessage"
         android:layout_marginTop="15dp"
         android:singleLine="true" />
@@ -32,20 +47,20 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkNotesInput"
-        android:hint="@string/homework_notes_hint"
+        android:id="@+id/taskNotesInput"
+        android:hint="@string/task_notes_hint"
         android:inputType="textMultiLine"
         android:layout_marginTop="15dp"
         android:minLines="3" />
 
     <TextView
-        android:id="@+id/homeworkDueDateLabel"
+        android:id="@+id/taskDueDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight=".4"
         android:layout_gravity="top|left"
         android:singleLine="true"
-        android:text="@string/homework_due_date_label"
+        android:text="@string/task_due_date_label"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="15dp" />
 
@@ -57,29 +72,14 @@
         android:layout_margin="0dp"
         android:layout_marginTop="5dp">
 
-        <!--
-        <DatePicker
-            android:id="@+id/homeworkDueDateInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".4"
-            android:layout_gravity="bottom|left" />
-
-        <TimePicker
-            android:id="@+id/homeworkDueDateTimeInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".4"
-            android:layout_gravity="bottom|right" />
-        -->
-
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".35"
             android:layout_gravity="left"
             android:hint="Due Date"
-            android:id="@+id/dueDateEditText" />
+            android:focusableInTouchMode="false"
+            android:id="@+id/taskDueDateEditText" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -87,7 +87,34 @@
             android:layout_weight=".35"
             android:layout_gravity="right"
             android:hint="Due Time"
-            android:id="@+id/dueTimeEditText" />
+            android:focusableInTouchMode="false"
+            android:id="@+id/taskDueTimeEditText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="0dp"
+        android:layout_margin="0dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".35"
+            android:layout_gravity="right"
+            android:text="Cancel"
+            android:id="@+id/taskCancelBtn" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".35"
+            android:layout_gravity="left"
+            android:text="Done"
+            android:id="@+id/taskDoneBtn" />
 
     </LinearLayout>
 

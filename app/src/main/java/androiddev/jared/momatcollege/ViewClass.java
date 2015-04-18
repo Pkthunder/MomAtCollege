@@ -149,7 +149,7 @@ public class ViewClass extends ActionBarActivity {
 
     public void addAClass(){
         //DONE: Intent to navigate to add a class
-        Intent intent = new Intent(ViewClass.this, AddClass.class);
+        Intent intent = new Intent(ViewClass.this, AddTask.class);
         startActivity(intent);
     }
 
@@ -164,7 +164,7 @@ public class ViewClass extends ActionBarActivity {
     public void homework(){
         //DONE: Intent to navigate to add a homework
 
-        Intent intent = new Intent(ViewClass.this, AddHomework.class);
+        Intent intent = new Intent(ViewClass.this, AddTask.class);
         startActivity(intent);
 
     }

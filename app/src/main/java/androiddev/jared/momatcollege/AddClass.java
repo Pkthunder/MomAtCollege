@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -63,9 +64,7 @@ public class AddClass extends ActionBarActivity {
         //////////////////////////////////////////////////////////  Days of the week picker functionality   /////////////////////////////////////////////////////////////
         setWeekdayPicker();
 
-        //////////////////////////////////////////////////////////  Date Picker Dialog Functionality   /////////////////////////////////////////////////////////////
-        //mDateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
-        //mTimeFormat = DateFormat.getTimeInstance(DateFormat.LONG, Locale.US);
+        //////////////////////////////////////////////////////////  Date Picker Dialog Functionality   //////////////////////////////////////////////////////////////
         mDateFormat = new SimpleDateFormat("MMM dd, yyyy");
         mTimeFormat = new SimpleDateFormat("h:mm a");
 
@@ -296,7 +295,7 @@ public class AddClass extends ActionBarActivity {
             errorMsg = "Please Enter a Class Name";
             return false;
         }
-        values.put(ClassDbHelper.VAL_NAMES[1], className.getText().toString());
+        values.put(ClassDbHelper.CLASS_FIELDS[1], className.getText().toString());
 
         //Location
         EditText location = (EditText) findViewById(R.id.locationInput);
@@ -304,7 +303,7 @@ public class AddClass extends ActionBarActivity {
             errorMsg = "Please Enter a Class Location";
             return false;
         }
-        values.put(ClassDbHelper.VAL_NAMES[2], location.getText().toString());
+        values.put(ClassDbHelper.CLASS_FIELDS[2], location.getText().toString());
 
         //Teacher Name
         EditText teacherName = (EditText) findViewById(R.id.teacherNameInput);
@@ -312,11 +311,11 @@ public class AddClass extends ActionBarActivity {
             errorMsg = "Please Enter a Teacher's Name";
             return false;
         }
-        values.put(ClassDbHelper.VAL_NAMES[3], teacherName.getText().toString());
+        values.put(ClassDbHelper.CLASS_FIELDS[3], teacherName.getText().toString());
 
         //Teacher Notes
         EditText teacherNotes = (EditText) findViewById(R.id.teacherNotesInput);
-        values.put(ClassDbHelper.VAL_NAMES[4], teacherNotes.getText().toString());
+        values.put(ClassDbHelper.CLASS_FIELDS[4], teacherNotes.getText().toString());
 
         //Frequency
         String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
@@ -330,7 +329,7 @@ public class AddClass extends ActionBarActivity {
             errorMsg = "Please select the Weekdays your class occurs";
             return false;
         }
-        values.put(ClassDbHelper.VAL_NAMES[5], frequency);
+        values.put(ClassDbHelper.CLASS_FIELDS[5], frequency);
 
         //Start Date and Time && End Date and Time
         if( fromTimeText.getText().toString().equals("") ) {
@@ -353,13 +352,21 @@ public class AddClass extends ActionBarActivity {
             errorMsg = "Please check your start and end date!";
             return false;
         }
-        DateFormat mFormat = new SimpleDateFormat("yyy/MM/dd HH:mm:ss");
-        values.put(ClassDbHelper.VAL_NAMES[6], mFormat.format(startDateTime.getTime()));
-        values.put(ClassDbHelper.VAL_NAMES[7], mFormat.format(endDateTime.getTime()));
+        DateFormat mFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        values.put(ClassDbHelper.CLASS_FIELDS[6], mFormat.format(startDateTime.getTime()));
+        values.put(ClassDbHelper.CLASS_FIELDS[7], mFormat.format(endDateTime.getTime()));
 
         //Class Type
         Spinner classType = (Spinner) findViewById(R.id.classTypeInput);
-        values.put(ClassDbHelper.VAL_NAMES[8], classType.getSelectedItem().toString());
+        if ( classType.getSelectedItemPosition() == 0 ) {
+            errorMsg = "Please select a class type";
+            return false;
+        }
+        values.put(ClassDbHelper.CLASS_FIELDS[8], classType.getSelectedItem().toString());
+
+        //Alarms Boolean
+        CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
+        values.put(ClassDbHelper.CLASS_FIELDS[9], alarmBoolean.isChecked());
 
         //Not an error, just using the variable
         errorMsg = className.getText().toString();

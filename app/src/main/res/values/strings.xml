@@ -14,8 +14,6 @@
     <string name="frequency">When:</string>
     <string name="action_search">Search</string>
     <string name="action_schedule">Schedule</string>
-
-
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
 
@@ -26,6 +24,8 @@
     <string name="add_class_title">Add A Class</string>
     <string name="add_homework_title">Add A Homework</string>
     <string name="add_test_title">Add A Test</string>
+    <string name="title_activity_add_task">Add A Task</string>
+    <string name="add_task_title">Add A Task</string>
     <string name="time_date_dialog_title">Date / Time</string>
     <string name="weekday_dialog_title">Select The Days</string>
 
@@ -59,8 +59,8 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
     <string-array name="class_types">
+        <item>Choose a Class Type...</item>
         <item>Lecture</item>
         <item>Recitation</item>
         <item>Lab</item>
@@ -72,13 +72,23 @@
     <string name="homework_notes_hint">Notes (optional)</string>
     <string name="homework_due_date_label">Due Date / Time</string>
 
-    <!-- ******************************************************************** Add a Test ********************************************************** -->
+    <!-- ******************************************************************** Add a Task ********************************************************** -->
 
-    <string name="test_name_hint">Test Name</string>
-    <string name="test_notes_hint">Notes (optional)</string>
-    <string name="test_date_label">Test Date / Time</string>
-    <string name="title_activity_add_calendar">AddCalendar</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_view_class">ViewClass</string>
+    <string name="task_name_hint">Task Name</string>
+    <string name="task_notes_hint">Notes (optional)</string>
+    <string name="task_due_date_label">Due Date / Time</string>
+    <string name="task_type_hint">Choose a type...</string>
+    <string-array name="task_type_array">
+        <item>Choose a Task Type...</item>
+        <item>Homework</item>
+        <item>Test/Quiz</item>
+        <item>Study Group</item>
+    </string-array>
+
+    <!-- ********************************************************************** Other ************************************************************* -->
+
+    <string name="title_activity_add_calendar">Add a Calendar</string>
+    <string name="title_activity_main">Mom at College</string>
+    <string name="title_activity_view_class">View Class</string>
 
 </resources>

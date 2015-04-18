@@ -17,14 +17,6 @@
             android:label="@string/add_class_title" >
         </activity>
         <activity
-            android:name=".AddHomework"
-            android:label="@string/title_activity_add_homework" >
-        </activity>
-        <activity
-            android:name=".AddTest"
-            android:label="@string/title_activity_add_test" >
-        </activity>
-        <activity
             android:name=".AddCalendar"
             android:label="@string/title_activity_add_calendar" >
         </activity>
@@ -47,6 +39,10 @@
         <activity
             android:name=".ViewClass"
             android:label="@string/title_activity_view_class" >
+        </activity>
+        <activity
+            android:name=".AddTask"
+            android:label="@string/title_activity_add_task" >
         </activity>
     </application>
 
