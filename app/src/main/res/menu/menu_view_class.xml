@@ -7,6 +7,14 @@
         android:title="@string/action_schedule"
         app:showAsAction="ifRoom"/>
 
+
+
+    <item android:id="@+id/add_an_alarm"
+        android:icon="@mipmap/ic_alarm"
+        android:title="Add an Alarm"
+        app:showAsAction="ifRoom" />
+
+
     <!-- Add A Class Button -->
     <item android:id="@+id/add_a_class"
         android:icon="@mipmap/ic_add"
@@ -19,6 +27,10 @@
         android:title="@string/add_a_homework"
         app:showAsAction="ifRoom" />
 
+    <!--<item android:id="@+id/add_an_alarm"-->
+        <!--android:icon="@mipmap/ic_alarm"-->
+        <!--android:title="Add an Alarm"-->
+        <!--app:showAsAction="ifRoom" />-->
     <!--
         &lt;!&ndash; Settings &ndash;&gt;
         <item android:id="@+id/action_settings"
