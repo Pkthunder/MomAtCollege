@@ -1,6 +1,8 @@
 package androiddev.jared.momatcollege;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,35 +49,23 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         lv = (ListView) findViewById(R.id.class_list);
+        ArrayList<ClassListItem> classList = new ArrayList<ClassListItem>();
 
-        // Dummy data to populate Class List
-        List<String> class_list = new ArrayList<String>();
-        class_list.add("Probability and Statistics");
-        class_list.add("Android Development");
-        class_list.add("Introduction to Ethics I");
-        class_list.add("Graphical User Interfacing II");
-        class_list.add("Probability and Statistics");
-        class_list.add("Android Development");
-        class_list.add("Introduction to Ethics I");
-        class_list.add("Graphical User Interfacing II");
-        class_list.add("Probability and Statistics");
-        class_list.add("Android Development");
-        class_list.add("Introduction to Ethics I");
-        class_list.add("Graphical User Interfacing II");
-        class_list.add("Probability and Statistics");
-        class_list.add("Android Development");
-        class_list.add("Introduction to Ethics I");
-        class_list.add("Graphical User Interfacing II");
-        class_list.add("Probability and Statistics");
-        class_list.add("Android Development");
-        class_list.add("Introduction to Ethics I");
-        class_list.add("Graphical User Interfacing II");
+        //Query Database for class List
+        if (!populateListView(classList)) {
+            Toast.makeText(getApplicationContext(), "No classes have been added!", Toast.LENGTH_LONG).show();
+        }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, class_list);
-
+        ClassItemAdapter arrayAdapter = new ClassItemAdapter(this, classList);
         lv.setAdapter(arrayAdapter);
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -83,13 +74,18 @@ public class MainActivity extends ActionBarActivity {
 
                 // Sends Class Information (right now just the title) to the ViewClass Activity
                 Intent intent = new Intent(MainActivity.this, ViewClass.class);
-                String selectedFromList = lv.getItemAtPosition(position).toString();
-                intent.putExtra("listItem", selectedFromList);
+                ClassListItem item = (ClassListItem) lv.getItemAtPosition(position);
+                intent.putExtra("listItem", item.getClassName());
+                intent.putExtra("classId", item.getClassId());
+
                 startActivity(intent);
 
             }
         });
+
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,5 +124,46 @@ public class MainActivity extends ActionBarActivity {
         //TODO: Intent to navigate to view the schedule
         Intent intent = new Intent(MainActivity.this, AddCalendar.class);
         startActivity(intent);
+    }
+
+    private boolean populateListView(ArrayList<ClassListItem> classList) {
+        ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
+        SQLiteDatabase mDb = mHelper.getWritableDatabase();
+
+        Cursor c = mDb.rawQuery(ClassDbHelper.CLASS_SELECT_ALL, null);
+
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                String name = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[1]));
+                String daysOfWeek = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5]));
+                int classId = c.getInt(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[0]));
+                daysOfWeek = formatDaysOfWeek(daysOfWeek);
+                classList.add(new ClassListItem(name, daysOfWeek, classId));
+                c.moveToNext();
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private String formatDaysOfWeek( String daysOfWeek ) {
+        //String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+        String result = "";
+
+        if (daysOfWeek.length() < 4) {
+            return daysOfWeek;
+        }
+
+        for ( int i=0; i<daysOfWeek.length(); i++ ) {
+            result += daysOfWeek.charAt(i);
+            ++i;
+            result += daysOfWeek.charAt(i);
+            if ( i < daysOfWeek.length()-2) {
+                result += ", ";
+            }
+        }
+        return result;
     }
 }

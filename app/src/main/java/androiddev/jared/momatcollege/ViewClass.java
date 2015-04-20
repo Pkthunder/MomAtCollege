@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +37,11 @@ public class ViewClass extends ActionBarActivity {
         //Get class selected from MainActivity
         Intent intent = getIntent();
         String text = intent.getStringExtra("listItem");
+        int classId = intent.getIntExtra("classId", 0);
 
         //Displays all the information about the class selected
         mClassName = (TextView) findViewById(R.id.class_name);
-        mClassName.setText(mClassName.getText() + text);
+        mClassName.setText(mClassName.getText() + text + " (" + classId + ")");
 
         mTeacherName = (TextView) findViewById(R.id.teacherName);
         mTeacherName.setText(mTeacherName.getText() + " Guanling Chen");
@@ -115,6 +117,15 @@ public class ViewClass extends ActionBarActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //TESTING
+        Intent intent = getIntent();
+        int classId = intent.getIntExtra("classId", 0);
+        Toast.makeText(getApplicationContext(), "ClassId: " + classId, Toast.LENGTH_LONG);
     }
 
 

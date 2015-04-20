@@ -31,6 +31,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     CLASS_FIELDS[8] + " text NOT NULL, " +
                     CLASS_FIELDS[9] + " tinyint(1) NOT NULL);";
 
+    public static final String CLASS_SELECT_ALL = "SELECT * FROM " + CLASS_TABLE_NAME;
+
     //////////////////////////////////////////////////////////////////  Task Table ///////////////////////////////////////////////////////////////////////
     public static final String TASK_TABLE_NAME = "taskDb";
     public static final String[] TASK_FIELDS = {"id", "classId", "task_type", "task_name",
