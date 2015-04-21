@@ -39,6 +39,28 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     CLASS_FIELDS[9] + " tinyint(1) NOT NULL);";
 
     public static final String CLASS_SELECT_ALL = "SELECT * FROM " + CLASS_TABLE_NAME;
+    public static String classSelectById( int classId ) {
+        return "SELECT * FROM " + CLASS_TABLE_NAME + " WHERE id='" + classId + "'";
+    }
+
+    public static String formatDaysOfWeek( String daysOfWeek ) {
+        //String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+        String result = "";
+
+        if (daysOfWeek.length() < 4) {
+            return daysOfWeek;
+        }
+
+        for ( int i=0; i<daysOfWeek.length(); i++ ) {
+            result += daysOfWeek.charAt(i);
+            ++i;
+            result += daysOfWeek.charAt(i);
+            if ( i < daysOfWeek.length()-2) {
+                result += ", ";
+            }
+        }
+        return result;
+    }
 
     //////////////////////////////////////////////////////////////////  Task Table ///////////////////////////////////////////////////////////////////////
     public static final String TASK_TABLE_NAME = "taskDb";
@@ -55,6 +77,10 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     TASK_FIELDS[5] + " datetime NOT NULL, " +
                     TASK_FIELDS[6] + " tinyint(1) NOT NULL);";
 
+    public static final String TASK_SELECT_ALL = "SELECT * FROM " + TASK_TABLE_NAME;
+    public static String taskSelectById( int classId ) {
+        return "SELECT * FROM " + TASK_TABLE_NAME + " WHERE classId='" + classId + "'";
+    }
 
     //////////////////////////////////////////////////////////////////  Alarm Table ///////////////////////////////////////////////////////////////////////
 

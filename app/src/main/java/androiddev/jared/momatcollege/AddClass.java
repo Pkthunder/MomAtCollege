@@ -121,6 +121,7 @@ public class AddClass extends ActionBarActivity {
                         Log.i(TAG, s);
                     }
                 }
+                finish();
             }
         });
 

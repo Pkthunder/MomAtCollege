@@ -10,6 +10,7 @@
     <string name="teacher">Teacher:</string>
     <string name="location">Location:</string>
     <string name="office_hours">Office Hours:</string>
+    <string name="display_teacher_notes">Teacher Notes:</string>
     <string name="phone_number">Phone Number:</string>
     <string name="frequency">When:</string>
     <string name="action_search">Search</string>

@@ -1,15 +1,20 @@
 package androiddev.jared.momatcollege;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +28,8 @@ public class ViewClass extends ActionBarActivity {
     private TextView mTeacherName;
     private TextView mLocation;
     private TextView mfrequency;
-    private TextView moffice_hours;
-    private TextView mphone_number;
+    //private Button showTeacherNotes;
+    private TextView showTeacherNotes;
     private ListView lv;
 
     @Override
@@ -41,28 +46,26 @@ public class ViewClass extends ActionBarActivity {
 
         //Displays all the information about the class selected
         mClassName = (TextView) findViewById(R.id.class_name);
-        mClassName.setText(mClassName.getText() + text + " (" + classId + ")");
+        //mClassName.setText(mClassName.getText() + text + " (" + classId + ")");
 
         mTeacherName = (TextView) findViewById(R.id.teacherName);
-        mTeacherName.setText(mTeacherName.getText() + " Guanling Chen");
+       // mTeacherName.setText(mTeacherName.getText() + " Guanling Chen");
 
         mLocation = (TextView) findViewById(R.id.location);
-        mLocation.setText(mLocation.getText() + " Olsen 402");
+       // mLocation.setText(mLocation.getText() + " Olsen 402");
 
         mfrequency = (TextView) findViewById(R.id.frequency);
-        mfrequency.setText(mfrequency.getText() + "Mon Wed 10-11");
+       // mfrequency.setText(mfrequency.getText() + "Mon Wed 10-11");
 
-        moffice_hours = (TextView) findViewById(R.id.office_hours);
-        moffice_hours.setText(moffice_hours.getText() + " Fri 12:30-2");
+        //showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
+        showTeacherNotes = (TextView) findViewById(R.id.teacher_notes_btn);
 
-        mphone_number = (TextView) findViewById(R.id.phone_number);
-        mphone_number.setText(mphone_number.getText() + " (978) 934-1212");
 
         //select the list
         lv = (ListView) findViewById(R.id.class_info_list);
 
         //Populates Class with dummy assignments
-        final List<String> class_list = new ArrayList<String>();
+       /* final List<String> class_list = new ArrayList<String>();
         class_list.add("Assignment 1");
         class_list.add("Assignment 2");
         class_list.add("Assignment 3");
@@ -115,17 +118,24 @@ public class ViewClass extends ActionBarActivity {
 
 
             }
-        });
+        }); */
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //TESTING
+
+        //Gets the classId passed to Activity by the intent
         Intent intent = getIntent();
         int classId = intent.getIntExtra("classId", 0);
-        Toast.makeText(getApplicationContext(), "ClassId: " + classId, Toast.LENGTH_LONG);
+
+        //Gets data from database
+        if (!getClassDatabaseData(classId)) {
+            Toast.makeText(getApplicationContext(), "Error Loading Data...", Toast.LENGTH_LONG).show();
+        }
+        //TODO: Finish implementation of task list
+        getTaskDatabaseData(classId);
     }
 
 
@@ -176,8 +186,105 @@ public class ViewClass extends ActionBarActivity {
         //DONE: Intent to navigate to add a homework
 
         Intent intent = new Intent(ViewClass.this, AddTask.class);
+        Intent currIntent = getIntent();
+        int classId = currIntent.getIntExtra("classId", 0);
+        intent.putExtra("classId", classId);
         startActivity(intent);
 
+    }
+
+    private boolean getClassDatabaseData(int classId) {
+        ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
+        SQLiteDatabase mDb = mHelper.getWritableDatabase();
+
+        final Cursor c = mDb.rawQuery(ClassDbHelper.classSelectById(classId), null);
+
+        if (c.moveToFirst()) {
+            //Class Name
+            mClassName.setText( mClassName.getText() + " " +
+                    c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[1])) );
+
+            //Teacher Name
+            mTeacherName.setText( mTeacherName.getText() + " " +
+                    c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[3])) );
+
+            //Class Location
+            mLocation.setText( mLocation.getText() + " " +
+                    c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[2])) );
+
+            //Days of Week (Frequency)
+            mfrequency.setText( mfrequency.getText() + " " +
+                    ClassDbHelper.formatDaysOfWeek(
+                            c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5]))
+                    ) );
+
+            showTeacherNotes.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ViewClass.this);
+                    String msg = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[4]));
+                    alert.setMessage(msg);
+                    alert.setTitle("Teacher Notes");
+                    alert.setNeutralButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface inter, int arg){
+                            //Doing nothing here just dismisses dialog
+                        }
+                    });
+                    alert.setCancelable(true);
+                    alert.create().show();
+                }
+            });
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean getTaskDatabaseData( int classId ) {
+        ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
+        SQLiteDatabase mDb = mHelper.getWritableDatabase();
+
+        final Cursor c = mDb.rawQuery(ClassDbHelper.taskSelectById(classId), null);
+        //TODO: Create and use a custom ListView  - Temporary one for now
+        final List<String> taskList = new ArrayList<String>();
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, taskList);
+
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                taskList.add(
+                        c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])) );
+
+                c.moveToNext();
+            }
+            lv.setAdapter(arrayAdapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ViewClass.this);
+                    String msg = "";
+
+                    c.moveToPosition(position);
+                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])) + "\n";
+                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[4])) + "\n";
+                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5]));
+                    alert.setMessage(msg);
+
+                    alert.setTitle(c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])));
+                    alert.setNeutralButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface inter, int arg){
+                            //Doing nothing here just dismisses dialog
+                        }
+                    });
+                    alert.setCancelable(true);
+                    alert.create().show();
+                }
+            });
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
 }

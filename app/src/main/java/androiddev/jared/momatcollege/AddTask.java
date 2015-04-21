@@ -4,6 +4,7 @@ package androiddev.jared.momatcollege;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -66,6 +67,7 @@ public class AddTask extends ActionBarActivity {
                     long newRowId = mDb.insert(ClassDbHelper.TASK_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
         });
@@ -148,9 +150,9 @@ public class AddTask extends ActionBarActivity {
             "task_notes", "due_date_time", "task_complete_bool"};*/
 
         //Class Id
-        //TODO: Get a class Id to pass to database
-        //temporary hardcoded
-        values.put(ClassDbHelper.TASK_FIELDS[1], 0);
+        Intent currIntent = getIntent();
+        int classId = currIntent.getIntExtra("classId", 0);
+        values.put(ClassDbHelper.TASK_FIELDS[1], classId);
 
         //Task Type
         Spinner taskType = (Spinner) findViewById(R.id.taskTypeInput);

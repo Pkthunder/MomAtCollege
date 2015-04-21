@@ -121,7 +121,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void schedule(){
-        //TODO: Intent to navigate to view the schedule
+        //DONE: Intent to navigate to view the schedule
         Intent intent = new Intent(MainActivity.this, AddCalendar.class);
         startActivity(intent);
     }
