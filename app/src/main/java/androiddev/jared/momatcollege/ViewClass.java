@@ -265,9 +265,9 @@ public class ViewClass extends ActionBarActivity {
                     String msg = "";
 
                     c.moveToPosition(position);
-                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])) + "\n";
-                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[4])) + "\n";
-                    msg = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5]));
+                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])) + "\n";
+                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[4])) + "\n";
+                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5]));
                     alert.setMessage(msg);
 
                     alert.setTitle(c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])));
