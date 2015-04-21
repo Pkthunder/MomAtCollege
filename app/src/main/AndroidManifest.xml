@@ -21,12 +21,6 @@
             android:label="@string/title_activity_add_calendar" >
         </activity>
 
-        <receiver android:name=".AlarmManagerHelper" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >

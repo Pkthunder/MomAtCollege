@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
+
 public class AddClass extends ActionBarActivity {
+
+    private static final String TAG = AddClass.class.getSimpleName();
 
     //////////////////////////////////////////////////////////  Days of the Week Picker Variables   /////////////////////////////////////////////////////////////
     private TextView mMonPicker = null;
@@ -92,13 +96,30 @@ public class AddClass extends ActionBarActivity {
             public void onClick(View v) {
                 SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
-
+                ContentValues alarmValues = new ContentValues();
                 if ( !addDatabaseEntry(values) ) {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 } else {
+
+                    Log.i(TAG, values.toString());
+
                     long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+
+                    CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
+                    if(alarmBoolean.isChecked()) {
+
+
+                        addAlarmDatabaseEntry(alarmValues);
+                        Log.i(TAG, alarmValues.toString());
+
+
+                        Log.i(TAG, "HERE");
+                        long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
+                        String s = String.valueOf(newAlarmRowID);
+                        Log.i(TAG, s);
+                    }
                 }
             }
         });
@@ -372,4 +393,27 @@ public class AddClass extends ActionBarActivity {
         errorMsg = className.getText().toString();
         return true;
     }
+
+
+    private boolean addAlarmDatabaseEntry( ContentValues alarmValues ){
+        //Class Name
+        EditText className = (EditText) findViewById(R.id.classNameInput);
+        if (className.getText().toString().equals("")) {
+            errorMsg = "Please Enter a Class Name";
+            return false;
+        }
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[1], className.getText().toString());
+
+
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[2], "Alarm name");
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], 7);
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], 35);
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[5], "days of the week");
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[6], "weekly or no");
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[7], true);
+
+        return true;
+    }
+
+
 }
