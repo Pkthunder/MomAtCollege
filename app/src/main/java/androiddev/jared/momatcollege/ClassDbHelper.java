@@ -91,7 +91,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + CLASS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TASK_TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + SQL_CREATE_ALARM);
+        db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE_CREATE);
         onCreate(db);
     }
 
@@ -104,23 +104,22 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 //    }
 
 //
-//    public AlarmModel populateModel(Cursor c) {
-//        AlarmModel model = new AlarmModel();
-//        model.id = c.getLong(c.getColumnIndex(Alarm._ID));
-//        model.name = c.getString(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_NAME));
-//        model.timeHour = c.getInt(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_TIME_HOUR));
-//        model.timeMinute = c.getInt(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_TIME_MINUTE));
-//        model.repeatWeekly = c.getInt(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_REPEAT_WEEKLY)) == 0 ? false : true;
-//        model.alarmTone = c.getString(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_TONE)) != "" ? Uri.parse(c.getString(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_TONE))) : null;
-//        model.isEnabled = c.getInt(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_ENABLED)) == 0 ? false : true;
-//
-//        String[] repeatingDays = c.getString(c.getColumnIndex(Alarm.COLUMN_NAME_ALARM_REPEAT_DAYS)).split(",");
-//        for (int i = 0; i < repeatingDays.length; ++i) {
-//            model.setRepeatingDay(i, repeatingDays[i].equals("false") ? false : true);
-//        }
-//
-//        return model;
-//    }
+    public AlarmModel populateModel(Cursor c) {
+        AlarmModel model = new AlarmModel();
+        model.id = c.getLong(c.getColumnIndex(ALARM_FIELDS[0]));
+        model.name = c.getString(c.getColumnIndex(ALARM_FIELDS[2]));
+        model.timeHour = c.getInt(c.getColumnIndex(ALARM_FIELDS[3]));
+        model.timeMinute = c.getInt(c.getColumnIndex(ALARM_FIELDS[4]));
+        model.repeatWeekly = c.getInt(c.getColumnIndex(ALARM_FIELDS[6])) == 0 ? false : true;
+        model.isEnabled = c.getInt(c.getColumnIndex(ALARM_FIELDS[7])) == 0 ? false : true;
+
+        String[] repeatingDays = c.getString(c.getColumnIndex(ALARM_FIELDS[5])).split(",");
+        for (int i = 0; i < repeatingDays.length; ++i) {
+            model.setRepeatingDay(i, repeatingDays[i].equals("false") ? false : true);
+        }
+
+        return model;
+    }
 //
 //    public ContentValues populateContent(AlarmModel model) {
 //        ContentValues values = new ContentValues();
@@ -146,39 +145,39 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 //        return getWritableDatabase().update(Alarm.ALARM_TABLE_NAME, values, Alarm._ID + " = ?", new String[]{String.valueOf(model.id)});
 //    }
 //
-//    public AlarmModel getAlarm(long id) {
-//        SQLiteDatabase db = this.getReadableDatabase();
+    public AlarmModel getAlarm(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String select = "SELECT * FROM " + ALARM_TABLE_NAME + " WHERE " + ALARM_FIELDS[0] + " = " + id;
+
+        Cursor c = db.rawQuery(select, null);
+
+        if (c.moveToNext()) {
+            return populateModel(c);
+        }
+
+        return null;
+    }
 //
-//        String select = "SELECT * FROM " + Alarm.ALARM_TABLE_NAME + " WHERE " + Alarm._ID + " = " + id;
-//
-//        Cursor c = db.rawQuery(select, null);
-//
-//        if (c.moveToNext()) {
-//            return populateModel(c);
-//        }
-//
-//        return null;
-//    }
-//
-//    public List<AlarmModel> getAlarms() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        String select = "SELECT * FROM " + Alarm.ALARM_TABLE_NAME;
-//
-//        Cursor c = db.rawQuery(select, null);
-//
-//        List<AlarmModel> alarmList = new ArrayList<AlarmModel>();
-//
-//        while (c.moveToNext()) {
-//            alarmList.add(populateModel(c));
-//        }
-//
-//        if (!alarmList.isEmpty()) {
-//            return alarmList;
-//        }
-//
-//        return null;
-//    }
+    public List<AlarmModel> getAlarms() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String select = "SELECT * FROM " + ALARM_TABLE_NAME;
+
+        Cursor c = db.rawQuery(select, null);
+
+        List<AlarmModel> alarmList = new ArrayList<AlarmModel>();
+
+        while (c.moveToNext()) {
+            alarmList.add(populateModel(c));
+        }
+
+        if (!alarmList.isEmpty()) {
+            return alarmList;
+        }
+
+        return null;
+    }
 //
 //    public int deleteAlarm(long id) {
 //        return getWritableDatabase().delete(Alarm.ALARM_TABLE_NAME, Alarm._ID + " = ?", new String[]{String.valueOf(id)});
