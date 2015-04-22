@@ -13,9 +13,8 @@
         android:id="@+id/class_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:hint="@string/class_name_hint"
-        android:text=""/>
+        android:text="@string/class_name_hint"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <!-- Example of making a clickable TextView field
     <TextView
@@ -32,20 +31,29 @@
         android:id="@+id/teacherName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/teacher" />
+        android:text="@string/teacher"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/location" />
+        android:text="@string/location"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/frequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/frequency" />
+        android:text="@string/frequency"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <TextView
+        android:id="@+id/timeOfDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timeOfDay"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -59,23 +67,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/display_teacher_notes"
             android:text="@string/display_teacher_notes"
-            android:layout_margin="0dp" />
+            android:layout_margin="0dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-       <!-- <Button
+       <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
             android:layout_marginLeft="15dp"
             android:text="Show"
-            android:id="@+id/teacher_notes_btn" /> -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_marginLeft="15dp"
-            android:text="Click Here to View"
             android:id="@+id/teacher_notes_btn" />
 
     </LinearLayout>

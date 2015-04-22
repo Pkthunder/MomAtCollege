@@ -19,7 +19,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ViewClass extends ActionBarActivity {
@@ -28,8 +32,8 @@ public class ViewClass extends ActionBarActivity {
     private TextView mTeacherName;
     private TextView mLocation;
     private TextView mfrequency;
-    //private Button showTeacherNotes;
-    private TextView showTeacherNotes;
+    private TextView mTimeOfDay;
+    private Button showTeacherNotes;
     private ListView lv;
 
     @Override
@@ -57,8 +61,9 @@ public class ViewClass extends ActionBarActivity {
         mfrequency = (TextView) findViewById(R.id.frequency);
        // mfrequency.setText(mfrequency.getText() + "Mon Wed 10-11");
 
-        //showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
-        showTeacherNotes = (TextView) findViewById(R.id.teacher_notes_btn);
+        mTimeOfDay = (TextView) findViewById(R.id.timeOfDay);
+
+        showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
 
 
         //select the list
@@ -201,22 +206,24 @@ public class ViewClass extends ActionBarActivity {
 
         if (c.moveToFirst()) {
             //Class Name
-            mClassName.setText( mClassName.getText() + " " +
+            mClassName.setText(
                     c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[1])) );
 
             //Teacher Name
-            mTeacherName.setText( mTeacherName.getText() + " " +
+            mTeacherName.setText( "Teacher: " +
                     c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[3])) );
 
             //Class Location
-            mLocation.setText( mLocation.getText() + " " +
+            mLocation.setText( "Location: " +
                     c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[2])) );
 
             //Days of Week (Frequency)
-            mfrequency.setText( mfrequency.getText() + " " +
+            mfrequency.setText( "When: " +
                     ClassDbHelper.formatDaysOfWeek(
-                            c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5]))
-                    ) );
+                            c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5])) ));
+
+            mTimeOfDay.setText( "Time: " +
+                    c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[6])) );
 
             showTeacherNotes.setOnClickListener( new View.OnClickListener() {
                 @Override
@@ -265,9 +272,22 @@ public class ViewClass extends ActionBarActivity {
                     String msg = "";
 
                     c.moveToPosition(position);
-                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])) + "\n";
-                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[4])) + "\n";
-                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5]));
+
+                    /*
+                    DateFormat dateFromDb = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    DateFormat dateToDisplay = new SimpleDateFormat("MMM dd, yyyy at HH:mm");
+                    String mDueDate = "Error loading date...";
+                    try {
+                        mDueDate = dateToDisplay.format( dateFromDb.parse(
+                                c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5])) ));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    */
+                    String mDueDate = c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[5]));
+                    msg = "Due Date:\n\t" + mDueDate + "\n\n";
+                    msg += "Notes:\n\t";
+                    msg += c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[4]));
                     alert.setMessage(msg);
 
                     alert.setTitle(c.getString(c.getColumnIndex(ClassDbHelper.TASK_FIELDS[3])));

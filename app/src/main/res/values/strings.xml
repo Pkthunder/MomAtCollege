@@ -13,6 +13,7 @@
     <string name="display_teacher_notes">Teacher Notes:</string>
     <string name="phone_number">Phone Number:</string>
     <string name="frequency">When:</string>
+    <string name="timeOfDay">Time:</string>
     <string name="action_search">Search</string>
     <string name="action_schedule">Schedule</string>
     <string name="ok">Ok</string>
