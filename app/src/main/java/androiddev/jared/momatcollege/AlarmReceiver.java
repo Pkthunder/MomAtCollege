@@ -12,16 +12,16 @@ import android.database.sqlite.SQLiteDatabase;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        //setAlarms(context);
+        setAlarms(context);
     }
 
-//    public static void setAlarms(Context context){
-//        //getAlarms();
-//        //for( each alarm : alarms )
-//
-//        PendingIntent pi = createPendingIntent(context, alarm);
-//    }
-//
+    public static void setAlarms(Context context){
+        //getAlarms();
+        //for( each alarm : alarms )
+
+        //PendingIntent pi = createPendingIntent(context, alarm);
+    }
+
 //    private static PendingIntent createPendingIntent(Context context, AlarmModel alarm){
 //        Intent intent = new Intent(context, AlarmService.class);
 //        intent.putExtra(ID, alarm.id);
