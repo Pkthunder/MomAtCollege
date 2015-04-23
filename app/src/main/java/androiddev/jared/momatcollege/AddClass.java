@@ -107,20 +107,16 @@ public class AddClass extends ActionBarActivity {
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
-                    CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
-                    if(alarmBoolean.isChecked()) {
+                    addAlarmDatabaseEntry(alarmValues, newRowId);
+                    Log.i(TAG, alarmValues.toString());
 
 
-                        addAlarmDatabaseEntry(alarmValues);
-                        Log.i(TAG, alarmValues.toString());
-
-
-                        Log.i(TAG, "HERE");
-                        long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
-                        String s = String.valueOf(newAlarmRowID);
-                        Log.i(TAG, s);
-                    }
+                    Log.i(TAG, "HERE");
+                    long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
+                    String s = String.valueOf(newAlarmRowID);
+                    Log.i(TAG, s);
                 }
+
                 finish();
             }
         });
@@ -396,25 +392,57 @@ public class AddClass extends ActionBarActivity {
     }
 
 
-    private boolean addAlarmDatabaseEntry( ContentValues alarmValues ){
-        //Class Name
+    private boolean addAlarmDatabaseEntry( ContentValues alarmValues, long classId ){
+
+        //class ID
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[1], classId);
+
+        //alarm_name-same as class name
         EditText className = (EditText) findViewById(R.id.classNameInput);
         if (className.getText().toString().equals("")) {
-            errorMsg = "Please Enter a Class Name";
+            errorMsg = "Class Name Got Lost";
             return false;
         }
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[1], className.getText().toString());
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[2], className.getText().toString());
 
 
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[2], "Alarm name");
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], 7);
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], 35);
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[5], "days of the week");
+
+        DateFormat hourFormat = new SimpleDateFormat("HH");
+        int h = Integer.parseInt(hourFormat.format(startDateTime.getTime()));
+
+        //alarm time hour
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
+
+
+        DateFormat minuteFormat = new SimpleDateFormat("mm");
+        int m = Integer.parseInt(minuteFormat.format(startDateTime.getTime()));
+
+        //alarm time minute
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], m);
+
+
+
+        //Repeating Days
+        String repeating_days = "";
+        for (int i=0; i<7; i++) {
+            if (weekdaySelections[i]) {
+                repeating_days += "1";
+            }
+            else{
+                repeating_days += "0";
+            }
+        }
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[5], repeating_days);
+
+
+        //repeat weekly always yes
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[6], "weekly or no");
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[7], true);
+
+        //check if alarm enabled
+        CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[7], alarmBoolean.isChecked());
 
         return true;
     }
-
 
 }

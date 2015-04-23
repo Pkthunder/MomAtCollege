@@ -134,39 +134,18 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     public AlarmModel populateModel(Cursor c) {
         AlarmModel model = new AlarmModel();
         model.id = c.getLong(c.getColumnIndex(ALARM_FIELDS[0]));
+        model.classId = c.getLong(c.getColumnIndex(ALARM_FIELDS[1]));
         model.name = c.getString(c.getColumnIndex(ALARM_FIELDS[2]));
         model.timeHour = c.getInt(c.getColumnIndex(ALARM_FIELDS[3]));
         model.timeMinute = c.getInt(c.getColumnIndex(ALARM_FIELDS[4]));
-        model.repeatWeekly = c.getInt(c.getColumnIndex(ALARM_FIELDS[6])) == 0 ? false : true;
-        model.isEnabled = c.getInt(c.getColumnIndex(ALARM_FIELDS[7])) == 0 ? false : true;
-
-        String[] repeatingDays = c.getString(c.getColumnIndex(ALARM_FIELDS[5])).split(",");
-        for (int i = 0; i < repeatingDays.length; ++i) {
-            model.setRepeatingDay(i, repeatingDays[i].equals("false") ? false : true);
-        }
+        model.repeatingDays = c.getString(c.getColumnIndex(ALARM_FIELDS[5]));
+        model.repeatWeekly = c.getInt(c.getColumnIndex(ALARM_FIELDS[6]));
+        model.isEnabled = c.getInt(c.getColumnIndex(ALARM_FIELDS[7]));
 
         return model;
     }
-//
-//    public ContentValues populateContent(AlarmModel model) {
-//        ContentValues values = new ContentValues();
-//        values.put(Alarm.COLUMN_NAME_ALARM_NAME, model.name);
-//        values.put(Alarm.COLUMN_NAME_ALARM_TIME_HOUR, model.timeHour);
-//        values.put(Alarm.COLUMN_NAME_ALARM_TIME_MINUTE, model.timeMinute);
-//        values.put(Alarm.COLUMN_NAME_ALARM_REPEAT_WEEKLY, model.repeatWeekly);
-//        values.put(Alarm.COLUMN_NAME_ALARM_TONE, model.alarmTone != null ? model.alarmTone.toString() : "");
-//        values.put(Alarm.COLUMN_NAME_ALARM_ENABLED, model.isEnabled);
-//
-//        String repeatingDays = "";
-//        for (int i = 0; i < 7; ++i) {
-//            repeatingDays += model.getRepeatingDay(i) + ",";
-//        }
-//        values.put(Alarm.COLUMN_NAME_ALARM_REPEAT_DAYS, repeatingDays);
-//
-//        return values;
-//    }
-//
-//
+
+
 //    public long updateAlarm(AlarmModel model) {
 //        ContentValues values = populateContent(model);
 //        return getWritableDatabase().update(Alarm.ALARM_TABLE_NAME, values, Alarm._ID + " = ?", new String[]{String.valueOf(model.id)});
@@ -185,7 +164,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 
         return null;
     }
-//
+
     public List<AlarmModel> getAlarms() {
         SQLiteDatabase db = this.getReadableDatabase();
 

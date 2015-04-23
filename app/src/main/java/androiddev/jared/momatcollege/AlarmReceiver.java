@@ -8,30 +8,44 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
+    private static final String TAG = AlarmReceiver.class.getSimpleName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
         setAlarms(context);
     }
 
     public static void setAlarms(Context context){
-        //getAlarms();
+
+        Log.i(TAG, "Set Alarms");
+
+        Cursor c = null;
+        if(!getAlarmsFromDatabase(context, c)){
+            Log.i(TAG, "Lookup Failed");
+
+        }
+        else{
+            Log.i(TAG, c.getString(2));
+        }
         //for( each alarm : alarms )
 
         //PendingIntent pi = createPendingIntent(context, alarm);
     }
 
-//    private static PendingIntent createPendingIntent(Context context, AlarmModel alarm){
-//        Intent intent = new Intent(context, AlarmService.class);
+    private static PendingIntent createPendingIntent(Context context, AlarmModel alarm){
+        Intent intent = new Intent(context, AlarmService.class);
 //        intent.putExtra(ID, alarm.id);
 //        intent.putExtra(NAME, alarm.name);
 //        intent.putExtra(TIME_HOUR, alarm.timeHour);
 //        intent.putExtra(TIME_MINUTE, alarm.timeMinute);
 //        intent.putExtra(ALARM_INFO, alarm.alarmInfo);
-//
-//        return PendingIntent.getService(context, (int) alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
+
+        return PendingIntent.getService(context, (int) alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
 
     public void setAlarm(Context context){

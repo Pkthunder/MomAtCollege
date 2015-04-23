@@ -15,22 +15,22 @@ public class AlarmModel {
 	public long id = -1;
 	public int timeHour;
 	public int timeMinute;
-	private boolean repeatingDays[];
-	public boolean repeatWeekly;
-	public Uri alarmTone;
+	public String repeatingDays;
+	public int repeatWeekly;
 	public String name;
-	public boolean isEnabled;
+    public Long classId;
+	public int isEnabled;
 	
-	public AlarmModel() {
-		repeatingDays = new boolean[7];
-	}
-	
-	public void setRepeatingDay(int dayOfWeek, boolean value) {
-		repeatingDays[dayOfWeek] = value;
-	}
-	
-	public boolean getRepeatingDay(int dayOfWeek) {
-		return repeatingDays[dayOfWeek];
-	}
-	
+//	public AlarmModel() {
+//		repeatingDays = new boolean[7];
+//	}
+//
+//	public void setRepeatingDay(int dayOfWeek, boolean value) {
+//		repeatingDays[dayOfWeek] = value;
+//	}
+//
+//	public boolean getRepeatingDay(int dayOfWeek) {
+//		return repeatingDays[dayOfWeek];
+//	}
+//
 }
