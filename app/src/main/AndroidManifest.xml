@@ -38,6 +38,18 @@
             android:name=".AddTask"
             android:label="@string/title_activity_add_task" >
         </activity>
+
+        <reciever
+            android:name=".AlarmReceiver"
+            android:process=":remote"
+            >
+            <intent-filter>
+                <action android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            </intent-filter>
+
+        </reciever>
+
+
     </application>
 
 </manifest>
