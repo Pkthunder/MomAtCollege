@@ -101,6 +101,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     ALARM_FIELDS[7] + " tinyint(1) NOT NULL" +
                     " )";
 
+    public static final String ALARM_SELECT_ALL = "SELECT * FROM " + ALARM_TABLE_NAME;
 
     ClassDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
