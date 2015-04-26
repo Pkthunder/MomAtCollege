@@ -1,6 +1,8 @@
 package androiddev.jared.momatcollege;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
+    private static final String PREFS_NAME = "MomAtCollegePrefs";
 
     private ListView lv;
 
@@ -48,6 +51,20 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        long savedCalId = settings.getLong("calId", -1);
+
+        if ( savedCalId == -1 ) { //if no calId has been set
+            GoogleCalendarHelper mHelper = new GoogleCalendarHelper();
+            ContentResolver cr = getContentResolver();
+            long calId = mHelper.createCalendar(cr);
+            Toast.makeText(getApplicationContext(), "Created Calendar! (id:" + calId + ")", Toast.LENGTH_LONG).show();
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("calId", calId);
+            editor.commit();
+        }
 
     }
 
@@ -135,9 +152,11 @@ public class MainActivity extends ActionBarActivity {
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
                 String name = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[1]));
-                String daysOfWeek = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5]));
+                String daysOfWeek = ClassDbHelper.formatDaysOfWeek(c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5]))) +
+                        " at " + ClassDbHelper.formatTime(c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[6]))) +
+                        "-" + ClassDbHelper.formatTime(c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[7])));
                 int classId = c.getInt(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[0]));
-                daysOfWeek = formatDaysOfWeek(daysOfWeek);
+                //daysOfWeek = formatDaysOfWeek(daysOfWeek);
                 classList.add(new ClassListItem(name, daysOfWeek, classId));
                 c.moveToNext();
             }
@@ -146,24 +165,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return true;
-    }
-
-    private String formatDaysOfWeek( String daysOfWeek ) {
-        //String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
-        String result = "";
-
-        if (daysOfWeek.length() < 4) {
-            return daysOfWeek;
-        }
-
-        for ( int i=0; i<daysOfWeek.length(); i++ ) {
-            result += daysOfWeek.charAt(i);
-            ++i;
-            result += daysOfWeek.charAt(i);
-            if ( i < daysOfWeek.length()-2) {
-                result += ", ";
-            }
-        }
-        return result;
     }
 }
