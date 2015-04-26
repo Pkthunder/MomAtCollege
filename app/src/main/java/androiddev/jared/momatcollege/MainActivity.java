@@ -9,13 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -46,6 +44,15 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent = new Intent( MainActivity.this, AddCalendar.class );
                 startActivity(intent);
 
+            }
+        });
+
+        Button set_alarms_button = (Button) findViewById(R.id.set_alarms);
+        set_alarms_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlarmManagerHelper.setAlarms(getApplicationContext());
             }
         });
 

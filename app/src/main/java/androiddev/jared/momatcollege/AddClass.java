@@ -110,11 +110,10 @@ public class AddClass extends ActionBarActivity {
                     addAlarmDatabaseEntry(alarmValues, newRowId);
                     Log.i(TAG, alarmValues.toString());
 
-
-                    Log.i(TAG, "HERE");
                     long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
                     String s = String.valueOf(newAlarmRowID);
-                    Log.i(TAG, s);
+                    Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
+
                 }
 
                 finish();

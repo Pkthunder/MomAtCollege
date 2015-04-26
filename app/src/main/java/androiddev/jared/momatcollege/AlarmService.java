@@ -3,6 +3,7 @@ package androiddev.jared.momatcollege;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 public class AlarmService extends Service {
 
@@ -15,13 +16,21 @@ public class AlarmService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		
-		Intent alarmIntent = new Intent(getBaseContext(), null);
-		alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		alarmIntent.putExtras(intent);
-		getApplication().startActivity(alarmIntent);
-		
-		AlarmManagerHelper.setAlarms(this);
+
+
+        ClassDbHelper dbHelper = new ClassDbHelper(getApplicationContext());
+        AlarmModel newAlarm = dbHelper.getAlarm(startId);
+
+
+        if(newAlarm.isEnabled == 1) {
+            //TODO KYLE LOCATION STUFF
+            //location 'if' should go here
+
+            Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
+            alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            alarmIntent.putExtras(intent);
+            getApplication().startActivity(alarmIntent);
+        }
 		
 		return super.onStartCommand(intent, flags, startId);
 	}

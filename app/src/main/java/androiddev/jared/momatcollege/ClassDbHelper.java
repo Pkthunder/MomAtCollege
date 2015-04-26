@@ -1,11 +1,11 @@
 package androiddev.jared.momatcollege;
 
-import android.content.ContentValues;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,9 @@ import java.util.List;
  * This class simply is a Class Db Table Help Object
  */
 public class ClassDbHelper extends SQLiteOpenHelper {
+
+    public static String TAG = ClassDbHelper.class.getSimpleName();
+
     private static final int DB_VERSION = 2;
     public static final String DB_NAME = "MomAtCollegeDb";
 
@@ -162,6 +165,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
             return populateModel(c);
         }
 
+        Log.i(TAG, "ALARM ID RETURNED NOTHING");
         return null;
     }
 

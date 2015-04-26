@@ -92,5 +92,6 @@
     <string name="title_activity_add_calendar">Add a Calendar</string>
     <string name="title_activity_main">Mom at College</string>
     <string name="title_activity_view_class">View Class</string>
+    <string name="title_activity_alarm_screen">AlarmScreen</string>
 
 </resources>
