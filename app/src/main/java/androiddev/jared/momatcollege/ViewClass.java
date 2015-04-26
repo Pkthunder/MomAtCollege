@@ -223,7 +223,8 @@ public class ViewClass extends ActionBarActivity {
                             c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[5])) ));
 
             mTimeOfDay.setText( "Time: " +
-                    c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[6])) );
+                    ClassDbHelper.formatTime(
+                        c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[6])) ));
 
             showTeacherNotes.setOnClickListener( new View.OnClickListener() {
                 @Override

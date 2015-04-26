@@ -16,17 +16,21 @@ import java.util.List;
  * This class simply is a Class Db Table Help Object
  */
 public class ClassDbHelper extends SQLiteOpenHelper {
+<<<<<<< HEAD
 
     public static String TAG = ClassDbHelper.class.getSimpleName();
 
     private static final int DB_VERSION = 2;
+=======
+    private static final int DB_VERSION = 4;
+>>>>>>> origin/master
     public static final String DB_NAME = "MomAtCollegeDb";
 
     //////////////////////////////////////////////////////////////////  Class Table ///////////////////////////////////////////////////////////////////////
     public static final String CLASS_TABLE_NAME = "classDb";
     public static final String[] CLASS_FIELDS = {"id", "class_name", "location", "teacher_name",
             "teacher_notes", "frequency", "start_date_time", "end_date_time", "class_type",
-            "auto_alarms_bool"};
+            "auto_alarms_bool", "calEventId"};
 
     private static final String CLASS_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE_NAME + " (" +
@@ -39,7 +43,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     CLASS_FIELDS[6] + " datetime NOT NULL, " +
                     CLASS_FIELDS[7] + " datetime NOT NULL, " +
                     CLASS_FIELDS[8] + " text NOT NULL, " +
-                    CLASS_FIELDS[9] + " tinyint(1) NOT NULL);";
+                    CLASS_FIELDS[9] + " tinyint(1) NOT NULL, " +
+                    CLASS_FIELDS[10] + " BIGINT NOT NULL);";
 
     public static final String CLASS_SELECT_ALL = "SELECT * FROM " + CLASS_TABLE_NAME;
     public static String classSelectById( int classId ) {
@@ -65,10 +70,15 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public static String formatTime( String datetime ) {
+        //returns HH:mm
+        return datetime.split(" ")[1].substring(0,5);
+    }
+
     //////////////////////////////////////////////////////////////////  Task Table ///////////////////////////////////////////////////////////////////////
     public static final String TASK_TABLE_NAME = "taskDb";
     public static final String[] TASK_FIELDS = {"id", "classId", "task_type", "task_name",
-            "task_notes", "due_date_time", "task_complete_bool"};
+            "task_notes", "due_date_time", "task_complete_bool", "calEventId"};
 
     private static final String TASK_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + TASK_TABLE_NAME + " (" +
@@ -78,7 +88,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     TASK_FIELDS[3] + " text NOT NULL, " +
                     TASK_FIELDS[4] + " text NOT NULL, " +
                     TASK_FIELDS[5] + " datetime NOT NULL, " +
-                    TASK_FIELDS[6] + " tinyint(1) NOT NULL);";
+                    TASK_FIELDS[6] + " tinyint(1) NOT NULL, " +
+                    TASK_FIELDS[7] + " BIGINT NOT NULL);";
 
     public static final String TASK_SELECT_ALL = "SELECT * FROM " + TASK_TABLE_NAME;
     public static String taskSelectById( int classId ) {
@@ -102,7 +113,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     ALARM_FIELDS[5] + " text NOT NULL," +
                     ALARM_FIELDS[6] + " tinyint(1) NOT NULL," +
                     ALARM_FIELDS[7] + " tinyint(1) NOT NULL" +
-                    " )";
+                    " );";
 
     public static final String ALARM_SELECT_ALL = "SELECT * FROM " + ALARM_TABLE_NAME;
 
@@ -121,7 +132,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + CLASS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TASK_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE_CREATE);
+        db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE_NAME);
         onCreate(db);
     }
 

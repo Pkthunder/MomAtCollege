@@ -2,7 +2,9 @@ package androiddev.jared.momatcollege;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import java.util.Calendar;
 public class AddClass extends ActionBarActivity {
 
     private static final String TAG = AddClass.class.getSimpleName();
+    private static final String PREFS_NAME = "MomAtCollegePrefs";
 
     //////////////////////////////////////////////////////////  Days of the Week Picker Variables   /////////////////////////////////////////////////////////////
     private TextView mMonPicker = null;
@@ -100,12 +103,25 @@ public class AddClass extends ActionBarActivity {
                 if ( !addDatabaseEntry(values) ) {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 } else {
-
-                    Log.i(TAG, values.toString());
+                    GoogleCalendarHelper mHelper = new GoogleCalendarHelper();
+                    ContentResolver cr = getContentResolver();
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    long savedCalId = settings.getLong("calId", -1);
+                    if ( savedCalId == -1 ) {
+                        //ERROR
+                        Toast.makeText(getApplicationContext(), "Internal Error, Please Restart App", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                    long calEventId = mHelper.createNewEventOnCalendar(getApplicationContext(), cr, startDateTime, endDateTime,
+                            values.getAsString(ClassDbHelper.CLASS_FIELDS[5]),
+                            values.getAsString(ClassDbHelper.CLASS_FIELDS[1]),
+                            values.getAsString(ClassDbHelper.CLASS_FIELDS[2]),
+                            savedCalId);
+                    values.put(ClassDbHelper.CLASS_FIELDS[10], calEventId);
 
                     long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
-                    Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
                     addAlarmDatabaseEntry(alarmValues, newRowId);
                     Log.i(TAG, alarmValues.toString());
@@ -115,8 +131,10 @@ public class AddClass extends ActionBarActivity {
                     Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
 
                 }
+                    Log.i(TAG, s);
 
-                finish();
+                    finish();
+                }
             }
         });
 
@@ -220,6 +238,14 @@ public class AddClass extends ActionBarActivity {
                 weekdaySelections[6] = !(weekdaySelections[6]);
             }
         });
+
+       /* toggleWeekdayClick(mMonPicker);
+        toggleWeekdayClick(mTuePicker);
+        toggleWeekdayClick(mWedPicker);
+        toggleWeekdayClick(mThrPicker);
+        toggleWeekdayClick(mFriPicker);
+        toggleWeekdayClick(mSatPicker);
+        toggleWeekdayClick(mSunPicker); */
     }
 
     private void setDateDialogs() {
