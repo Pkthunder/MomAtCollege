@@ -15,13 +15,6 @@
         android:layout_height="wrap_content"
         android:text="@string/title_activity_main" />
 
-    <Button
-        android:id="@+id/set_alarms"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="set alarms" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -130,6 +130,8 @@ public class AddClass extends ActionBarActivity {
                     String s = String.valueOf(newAlarmRowID);
                     Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
 
+                    AlarmManagerHelper.setAlarms(getApplicationContext());
+
                 }
 
 
