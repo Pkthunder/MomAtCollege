@@ -131,11 +131,11 @@ public class AddClass extends ActionBarActivity {
                     Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
 
                 }
-                    Log.i(TAG, s);
 
-                    finish();
+
+                finish();
                 }
-            }
+
         });
 
         Button cancelBtn = (Button) findViewById(R.id.cancelBtn);

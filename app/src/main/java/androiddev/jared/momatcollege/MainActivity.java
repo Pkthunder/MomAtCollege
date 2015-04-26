@@ -50,7 +50,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-<<<<<<< HEAD
         Button set_alarms_button = (Button) findViewById(R.id.set_alarms);
         set_alarms_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +58,6 @@ public class MainActivity extends ActionBarActivity {
                 AlarmManagerHelper.setAlarms(getApplicationContext());
             }
         });
-=======
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         long savedCalId = settings.getLong("calId", -1);
 
@@ -73,7 +71,6 @@ public class MainActivity extends ActionBarActivity {
             editor.putLong("calId", calId);
             editor.commit();
         }
->>>>>>> origin/master
 
     }
 

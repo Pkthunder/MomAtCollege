@@ -16,14 +16,9 @@ import java.util.List;
  * This class simply is a Class Db Table Help Object
  */
 public class ClassDbHelper extends SQLiteOpenHelper {
-<<<<<<< HEAD
 
     public static String TAG = ClassDbHelper.class.getSimpleName();
-
-    private static final int DB_VERSION = 2;
-=======
     private static final int DB_VERSION = 4;
->>>>>>> origin/master
     public static final String DB_NAME = "MomAtCollegeDb";
 
     //////////////////////////////////////////////////////////////////  Class Table ///////////////////////////////////////////////////////////////////////
