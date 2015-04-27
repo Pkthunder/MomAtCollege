@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.widget.Toast;
@@ -19,18 +20,6 @@ import java.util.TimeZone;
 public class GoogleCalendarHelper {
     private static final String TAG = GoogleCalendarHelper.class.getSimpleName();
 
-    private static final String[] GCH_PROJECTION = new String[] {
-            CalendarContract.Calendars._ID,
-            CalendarContract.Calendars.ACCOUNT_NAME,
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-            CalendarContract.Calendars.OWNER_ACCOUNT
-    };
-
-    private static final int GCH_PROJ_ID = 0;
-    private static final int GCH_PROJ_ACCOUNT = 1;
-    private static final int GCH_PROJ_DISPLAY = 2;
-    private static final int GCH_PROJ_OWNER = 3;
-
     private static final String GCH_ACCOUNT_NAME = "androiddev.jared.momatcollege";
     private static final String GCH_CAL_NAME = "MomAtCollege Calendar";
     private static final String GCH_OWNER_ACC = "jared_perreault@yahoo.com";
@@ -42,7 +31,7 @@ public class GoogleCalendarHelper {
         values.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         values.put(CalendarContract.Calendars.NAME, GCH_CAL_NAME);
         values.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, GCH_CAL_NAME);
-        values.put(CalendarContract.Calendars.CALENDAR_COLOR, 0x000ff000);
+        values.put(CalendarContract.Calendars.CALENDAR_COLOR, 0x00ffff00);
         values.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
         values.put(CalendarContract.Calendars.OWNER_ACCOUNT, GCH_OWNER_ACC);
         values.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TimeZone.getDefault().getDisplayName());
@@ -61,26 +50,6 @@ public class GoogleCalendarHelper {
         return eventId;
     }
 
-    public long getCalendarId(ContentResolver cr) {
-        String[] projection = new String[]{CalendarContract.Calendars._ID};
-
-        String selection = CalendarContract.Calendars.ACCOUNT_NAME + " = ? " +
-            CalendarContract.Calendars.NAME + " = ? ";
-
-        String[] selArgs = new String[] { GCH_ACCOUNT_NAME, GCH_CAL_NAME};
-        Cursor cursor =
-                cr.query(
-                        CalendarContract.Calendars.CONTENT_URI,
-                        projection,
-                        selection,
-                        selArgs,
-                        null);
-        if (cursor.moveToFirst()) {
-            return cursor.getLong(0);
-        }
-        return -1;
-    }
-
     public long createNewEventOnCalendar(Context context, ContentResolver cr, Calendar startDateTime, Calendar endDateTime,
                                     String daysOfWeek, String nameOfEvent, String locOfEvent, long savedCalId) {
 
@@ -92,6 +61,7 @@ public class GoogleCalendarHelper {
                     nameOfEvent + " is due " + startDateTime.getTime().toString());
 
             values.put(CalendarContract.Events.DURATION, "PT10M");
+            values.put(CalendarContract.Events.EVENT_COLOR, Color.rgb(35, 35, 69));
         }
         //Adding a Class
         else {
@@ -115,6 +85,7 @@ public class GoogleCalendarHelper {
             int minDuration = Math.abs(endMin - startMin);
             String eventDuration = "PT" + String.valueOf(hourDuration) + "H" + String.valueOf(minDuration) + "M";
             values.put(CalendarContract.Events.DURATION, eventDuration);
+            values.put(CalendarContract.Events.EVENT_COLOR, Color.rgb(35, 69, 35));
         }
 
         values.put(CalendarContract.Events.DTSTART, startDateTime.getTimeInMillis());

@@ -1,11 +1,14 @@
 package androiddev.jared.momatcollege;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +19,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity {
     private static final String PREFS_NAME = "MomAtCollegePrefs";
@@ -44,9 +49,14 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
 
-                Intent intent = new Intent( MainActivity.this, AddCalendar.class );
-                startActivity(intent);
+                Calendar mCal = Calendar.getInstance(Locale.US);
 
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, mCal.getTimeInMillis());
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(builder.build());
+                startActivity(intent);
             }
         });
 
@@ -92,6 +102,7 @@ public class MainActivity extends ActionBarActivity {
                 ClassListItem item = (ClassListItem) lv.getItemAtPosition(position);
                 intent.putExtra("listItem", item.getClassName());
                 intent.putExtra("classId", item.getClassId());
+                intent.putExtra("classLocale", item.getLocation());
 
                 startActivity(intent);
 
@@ -136,8 +147,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void schedule(){
-        //DONE: Intent to navigate to view the schedule
-        Intent intent = new Intent(MainActivity.this, AddCalendar.class);
+        Calendar mCal = Calendar.getInstance(Locale.US);
+
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, mCal.getTimeInMillis());
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+                .setData(builder.build());
         startActivity(intent);
     }
 
@@ -154,8 +170,9 @@ public class MainActivity extends ActionBarActivity {
                         " at " + ClassDbHelper.formatTime(c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[6]))) +
                         "-" + ClassDbHelper.formatTime(c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[7])));
                 int classId = c.getInt(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[0]));
+                String location = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[2]));
                 //daysOfWeek = formatDaysOfWeek(daysOfWeek);
-                classList.add(new ClassListItem(name, daysOfWeek, classId));
+                classList.add(new ClassListItem(name, daysOfWeek, classId, location));
                 c.moveToNext();
             }
         } else {

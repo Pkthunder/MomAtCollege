@@ -134,9 +134,8 @@ public class AddClass extends ActionBarActivity {
 
                 }
 
-
                 finish();
-                }
+            }
 
         });
 

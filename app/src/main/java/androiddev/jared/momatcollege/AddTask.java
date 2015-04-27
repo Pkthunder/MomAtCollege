@@ -3,8 +3,10 @@ package androiddev.jared.momatcollege;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -22,9 +24,12 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 public class AddTask extends ActionBarActivity {
+
+    private static final String PREFS_NAME = "MomAtCollegePrefs";
 
     private EditText dueDateText;
     private EditText dueTimeText;
@@ -63,10 +68,29 @@ public class AddTask extends ActionBarActivity {
 
                 if ( !addDatabaseEntry(values) ) {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
-                } else {
+                }
+                else {
+
+                    GoogleCalendarHelper mHelper = new GoogleCalendarHelper();
+                    ContentResolver cr = getContentResolver();
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    long savedCalId = settings.getLong("calId", -1);
+                    if ( savedCalId == -1 ) {
+                        //ERROR
+                        Toast.makeText(getApplicationContext(), "Internal Error, Please Restart App", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                    Intent currIntent = getIntent();
+                    String locale = currIntent.getStringExtra("classLocale");
+                    String weekDay = mDueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US);
+                    long calEventId = mHelper.createNewEventOnCalendar(getApplicationContext(), cr, mDueDate, null,
+                            weekDay, values.getAsString(ClassDbHelper.TASK_FIELDS[3]), locale, savedCalId);
+                    values.put(ClassDbHelper.TASK_FIELDS[7], calEventId);
+
                     long newRowId = mDb.insert(ClassDbHelper.TASK_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+
                     finish();
                 }
             }

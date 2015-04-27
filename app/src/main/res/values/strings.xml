@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="add_a_homework">Add A Homework</string>
     <string name="add_a_class">Add A Class</string>
-    <string name="view_schedule">Add Calendar</string>
+    <string name="view_schedule">View Calendar</string>
     <string name="teacher">Teacher:</string>
     <string name="location">Location:</string>
     <string name="office_hours">Office Hours:</string>
@@ -16,7 +16,7 @@
     <string name="timeOfDay">Time:</string>
     <string name="action_search">Search</string>
     <string name="action_schedule">Schedule</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
     <!-- Titles -->
