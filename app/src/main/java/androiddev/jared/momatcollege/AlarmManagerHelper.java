@@ -134,13 +134,15 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     private static PendingIntent createPendingIntent(Context context, AlarmModel alarm) {
         //Log.i(TAG, "PENDING INTENT");
         Intent intent = new Intent(context, AlarmService.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //Log.i(TAG, "alarm id is equal: " + Long.toString(alarm.id));
-        intent.putExtra(ID, alarm.id);
+        intent.putExtra("id", alarm.id);
         intent.putExtra(NAME, alarm.name);
         intent.putExtra(TIME_HOUR, alarm.timeHour);
         intent.putExtra(TIME_MINUTE, alarm.timeMinute);
         intent.putExtra(IS_ENABLED, alarm.isEnabled);
 
-        return PendingIntent.getService(context, (int) alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

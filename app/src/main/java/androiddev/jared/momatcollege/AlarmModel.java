@@ -2,7 +2,7 @@ package androiddev.jared.momatcollege;
 
 public class AlarmModel {
 
-	public long id = -1;
+	public long id = -2;
 	public int timeHour;
 	public int timeMinute;
 	public String repeatingDays;

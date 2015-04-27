@@ -2,6 +2,7 @@ package androiddev.jared.momatcollege;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -17,9 +18,14 @@ public class AlarmService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+        long ala_id = intent.getLongExtra("id", -1);
+        Log.i(TAG, "alarm ID = " + ala_id);
+
 
         ClassDbHelper dbHelper = new ClassDbHelper(getApplicationContext());
-        AlarmModel newAlarm = dbHelper.getAlarm(startId);
+        AlarmModel newAlarm = dbHelper.getAlarm(ala_id);
+
+        Log.i(TAG,"newAlarm = " + newAlarm.timeHour);
 
 
         if(newAlarm.isEnabled == 1) {

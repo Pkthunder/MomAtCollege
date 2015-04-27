@@ -107,7 +107,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     ALARM_FIELDS[4] + " int NOT NULL," +
                     ALARM_FIELDS[5] + " text NOT NULL," +
                     ALARM_FIELDS[6] + " tinyint(1) NOT NULL," +
-                    ALARM_FIELDS[7] + " tinyint(1) NOT NULL" +
+                    ALARM_FIELDS[7] + " tinyint(1) NOT NULL," +
                     ALARM_FIELDS[8] + " tinyint(1) NOT NULL" +
                     " );";
 
