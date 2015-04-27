@@ -56,6 +56,10 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 calendar.set(Calendar.SECOND, 00);
 
                 //TODO: Use a switch brah
+                calendar.setTimeInMillis(calendar.getTimeInMillis() - ( 30 * 60 * 1000 ));
+
+
+
                 for( int i = 0; i < 7; i++){
                     if( alarm.repeatingDays.substring(i,i+1).equals("1")){
                         if(i==0){//MON

@@ -23,8 +23,6 @@ public class AlarmService extends Service {
 
 
         if(newAlarm.isEnabled == 1) {
-            //TODO KYLE LOCATION STUFF
-            //location 'if' should go here
 
             Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
             alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
