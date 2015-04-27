@@ -10,6 +10,7 @@ public class AlarmModel {
 	public String name;
     public Long classId;
 	public int isEnabled;
+    public int isAfterClass;
 	
 
 }

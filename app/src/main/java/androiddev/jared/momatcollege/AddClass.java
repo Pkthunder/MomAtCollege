@@ -123,7 +123,7 @@ public class AddClass extends ActionBarActivity {
                     //just using errorMsg variable, there is no error
                     //Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
-                    addAlarmDatabaseEntry(alarmValues, newRowId);
+                    addAlarmDatabaseEntry(alarmValues, newRowId, 0);
                     Log.i(TAG, alarmValues.toString());
 
                     long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
@@ -131,6 +131,16 @@ public class AddClass extends ActionBarActivity {
                     Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
 
                     AlarmManagerHelper.setAlarms(getApplicationContext());
+
+                    addAlarmDatabaseEntry(alarmValues, newRowId, 1);
+                    Log.i(TAG, alarmValues.toString());
+
+                    newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
+                    s = String.valueOf(newAlarmRowID);
+                    Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
+
+                    AlarmManagerHelper.setAlarms(getApplicationContext());
+
 
                 }
 
@@ -418,7 +428,7 @@ public class AddClass extends ActionBarActivity {
     }
 
 
-    private boolean addAlarmDatabaseEntry( ContentValues alarmValues, long classId ){
+    private boolean addAlarmDatabaseEntry( ContentValues alarmValues, long classId, int isAfterClass ){
 
         //class ID
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[1], classId);
@@ -445,15 +455,15 @@ public class AddClass extends ActionBarActivity {
         //alarmPreference can be set in the settings
         int alarmPreference = 30;
 
-        if( m < alarmPreference ){
-            h = h-1;
-            int temp = alarmPreference - m;
-            m = 60 - temp;
+        if(isAfterClass == 0) {
+            if (m < alarmPreference) {
+                h = h - 1;
+                int temp = alarmPreference - m;
+                m = 60 - temp;
+            } else {
+                m = m - 30;
+            }
         }
-        else {
-            m = m - 30;
-        }
-
         //alarm time hour
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
 
@@ -481,6 +491,10 @@ public class AddClass extends ActionBarActivity {
         //check if alarm enabled
         CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[7], alarmBoolean.isChecked());
+
+        //isAfterClass: 0 for not after class, 1 for after class
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[8], isAfterClass);
+
 
         return true;
     }

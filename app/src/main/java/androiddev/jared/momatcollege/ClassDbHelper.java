@@ -95,7 +95,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
 
     public static final String ALARM_TABLE_NAME = "alarmDb";
     public static final String[] ALARM_FIELDS = {"id", "classId", "alarm_name", "alarm_time_hour",
-            "alarm_time_minute", "alarm_repeat_days", "alarm_repeat_weekly", "alarm_enabled"};
+            "alarm_time_minute", "alarm_repeat_days", "alarm_repeat_weekly", "alarm_enabled", "alarm_isAfterClass"};
 
 
     private static final String ALARM_TABLE_CREATE =
@@ -108,6 +108,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     ALARM_FIELDS[5] + " text NOT NULL," +
                     ALARM_FIELDS[6] + " tinyint(1) NOT NULL," +
                     ALARM_FIELDS[7] + " tinyint(1) NOT NULL" +
+                    ALARM_FIELDS[8] + " tinyint(1) NOT NULL" +
                     " );";
 
     public static final String ALARM_SELECT_ALL = "SELECT * FROM " + ALARM_TABLE_NAME;

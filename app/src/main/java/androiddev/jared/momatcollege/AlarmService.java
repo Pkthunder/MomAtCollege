@@ -23,11 +23,20 @@ public class AlarmService extends Service {
 
 
         if(newAlarm.isEnabled == 1) {
-
-            Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
-            alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            alarmIntent.putExtras(intent);
-            getApplication().startActivity(alarmIntent);
+            if(newAlarm.isAfterClass == 1) {
+                //TODO KYLE put the location check here
+                //AlarmScreen.class should be addTask dialog
+                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
+                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                alarmIntent.putExtras(intent);
+                getApplication().startActivity(alarmIntent);
+            }
+            else{
+                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
+                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                alarmIntent.putExtras(intent);
+                getApplication().startActivity(alarmIntent);
+            }
         }
 		
 		return super.onStartCommand(intent, flags, startId);
