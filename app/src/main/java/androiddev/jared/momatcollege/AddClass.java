@@ -434,15 +434,29 @@ public class AddClass extends ActionBarActivity {
 
 
 
+
+        //find hours and minutes
         DateFormat hourFormat = new SimpleDateFormat("HH");
         int h = Integer.parseInt(hourFormat.format(startDateTime.getTime()));
 
-        //alarm time hour
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
-
-
         DateFormat minuteFormat = new SimpleDateFormat("mm");
         int m = Integer.parseInt(minuteFormat.format(startDateTime.getTime()));
+
+        //TODO do we want to do this?? (must be less that 60 for this setup, also will not update if changed)
+        //alarmPreference can be set in the settings
+        int alarmPreference = 30;
+
+        if( m < alarmPreference ){
+            h = h-1;
+            int temp = alarmPreference - m;
+            m = 60 - temp;
+        }
+        else {
+            m = m - 30;
+        }
+
+        //alarm time hour
+        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
 
         //alarm time minute
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], m);
