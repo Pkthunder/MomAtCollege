@@ -35,9 +35,12 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
 //        Log.i(TAG, "JUST BEFORE WEEKLY CHECK");
 
-
+        int numOfAlarms = 0;
         for (AlarmModel alarm : alarms) {
             if (alarm.isEnabled == 1) {
+                numOfAlarms ++;
+                Log.i(TAG, "numOfAlarms = " + numOfAlarms);
+
 
 //                Log.i(TAG, "isEnabled = " + Integer.toString(alarm.isEnabled));
 
@@ -55,50 +58,49 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 calendar.set(Calendar.MINUTE, alarm.timeMinute);
                 calendar.set(Calendar.SECOND, 00);
 
-                //TODO: Use a switch brah
-                calendar.setTimeInMillis(calendar.getTimeInMillis() - ( 30 * 60 * 1000 ));
+                Log.i(TAG, "Current time is : " + calendar.get(Calendar.HOUR_OF_DAY));
 
+                //TODO: Use a switch bruh
 
-
-                for( int i = 0; i < 7; i++){
+                for( int i = 0; i < 6; i++){
                     if( alarm.repeatingDays.substring(i,i+1).equals("1")){
-                        if(i==0){//MON
-//                            Log.i(TAG, "MON");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==1){//TUES
-//                            Log.i(TAG, "TUES");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==2){//WEDNES
-//                            Log.i(TAG, "WED");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==3){//THURS
-//                            Log.i(TAG, "THURS");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==4){//FRI
-//                            Log.i(TAG, "FRI");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==5){//SAT
-//                            Log.i(TAG, "SAT");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                            setAlarm(context, calendar, pIntent);
-                        }
-                        if(i==6) {//SUN
-//                            Log.i(TAG, "SUN");
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                            setAlarm(context, calendar, pIntent);
+                        switch(i){
+                            case 0: //MON
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 1: //TUES
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 2: //WEDNES
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 3://THURS
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 4://FRI
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 5://SAT
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
+
+                            case 6://SUN
+                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                                setAlarm(context, calendar, pIntent);
+                                break;
                         }
                     }
-
                 }
             }
         }
@@ -107,11 +109,8 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     @SuppressLint("NewApi")
     private static void setAlarm(Context context, Calendar calendar, PendingIntent pIntent) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
-        } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
-        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
+
     }
 
     public static void cancelAlarms(Context context) {

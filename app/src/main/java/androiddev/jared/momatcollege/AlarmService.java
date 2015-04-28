@@ -25,7 +25,6 @@ public class AlarmService extends Service {
         ClassDbHelper dbHelper = new ClassDbHelper(getApplicationContext());
         AlarmModel newAlarm = dbHelper.getAlarm(ala_id);
 
-        Log.i(TAG,"newAlarm = " + newAlarm.timeHour);
 
 
         if(newAlarm.isEnabled == 1) {

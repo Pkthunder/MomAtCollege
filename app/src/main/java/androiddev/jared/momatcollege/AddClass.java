@@ -441,40 +441,56 @@ public class AddClass extends ActionBarActivity {
         alarmValues.put(ClassDbHelper.ALARM_FIELDS[2], className.getText().toString());
 
 
-
-
-        //find hours and minutes
-        DateFormat hourFormat = new SimpleDateFormat("HH");
-        int h = Integer.parseInt(hourFormat.format(startDateTime.getTime()));
-
-        DateFormat minuteFormat = new SimpleDateFormat("mm");
-        int m = Integer.parseInt(minuteFormat.format(startDateTime.getTime()));
-
-        //TODO do we want to do this?? (must be less that 60 for this setup, also will not update if changed)
-        //alarmPreference can be set in the settings
-        int alarmPreference = 30;
-
+        //before class alarm
         if(isAfterClass == 0) {
+            //find hours and minutes
+            DateFormat hourFormat = new SimpleDateFormat("HH");
+            int h = Integer.parseInt(hourFormat.format(startDateTime.getTime()));
+
+            DateFormat minuteFormat = new SimpleDateFormat("mm");
+            int m = Integer.parseInt(minuteFormat.format(startDateTime.getTime()));
+
+            //TODO do we want to do this?? (must be less that 60 for this setup, also will not update if changed)
+            //alarmPreference can be set in the settings
+            int alarmPreference = 30;
+
+            //adjusts time to 'alarmPreference' prior to class starting
             if (m < alarmPreference) {
-                h = h-1;
+                h = h - 1;
                 int temp = alarmPreference - m;
                 m = 60 - temp;
-            }
-            else {
+            } else {
                 m = m - 30;
             }
-        }
-        //alarm time hour
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
 
-        //alarm time minute
-        alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], m);
+            //alarm time hour
+            alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
+
+            //alarm time minute
+            alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], m);
+        }
+        //after class alarm
+        else
+        {
+            //find hours and minutes
+            DateFormat hourFormat = new SimpleDateFormat("HH");
+            int h = Integer.parseInt(hourFormat.format(endDateTime.getTime()));
+
+            DateFormat minuteFormat = new SimpleDateFormat("mm");
+            int m = Integer.parseInt(minuteFormat.format(endDateTime.getTime()));
+
+            //alarm time hour
+            alarmValues.put(ClassDbHelper.ALARM_FIELDS[3], h);
+
+            //alarm time minute
+            alarmValues.put(ClassDbHelper.ALARM_FIELDS[4], m);
+        }
 
 
 
         //Repeating Days
         String repeating_days = "";
-        for (int i=0; i<7; i++) {
+        for (int i=0; i<6; i++) {
             if (weekdaySelections[i]) {
                 repeating_days += "1";
             }
