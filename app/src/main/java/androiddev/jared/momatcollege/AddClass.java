@@ -141,10 +141,9 @@ public class AddClass extends ActionBarActivity {
 
                     AlarmManagerHelper.setAlarms(getApplicationContext());
 
-
+                    finish();
                 }
 
-                finish();
             }
 
         });
@@ -457,10 +456,11 @@ public class AddClass extends ActionBarActivity {
 
         if(isAfterClass == 0) {
             if (m < alarmPreference) {
-                h = h - 1;
+                h = h-1;
                 int temp = alarmPreference - m;
                 m = 60 - temp;
-            } else {
+            }
+            else {
                 m = m - 30;
             }
         }

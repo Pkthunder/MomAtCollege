@@ -7,10 +7,12 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -58,7 +60,7 @@ public class GoogleCalendarHelper {
         //Adding a Task
         if ( endDateTime == null ) {
             values.put(CalendarContract.Events.DESCRIPTION,
-                    nameOfEvent + " is due " + startDateTime.getTime().toString());
+                    nameOfEvent + " is due at " + startDateTime.getTime().toString());
 
             values.put(CalendarContract.Events.DURATION, "PT10M");
             values.put(CalendarContract.Events.EVENT_COLOR, Color.rgb(35, 35, 69));
@@ -66,15 +68,24 @@ public class GoogleCalendarHelper {
         //Adding a Class
         else {
             //recurrence rule
+            //Creating BYDAY value
             String byDay = "";
             String[] days = ClassDbHelper.formatDaysOfWeek((daysOfWeek)).split(" ");
             for (int i = 0; i < days.length; i++) {
                 byDay += days[i];
             }
+
+            //Creating UNTIL value
+            String endYear = String.valueOf(endDateTime.get(Calendar.YEAR));
+            String endMonth = String.valueOf(endDateTime.get(Calendar.MONTH));
+            String endDay = String.valueOf(endDateTime.get(Calendar.DAY_OF_MONTH));
+            if ( endMonth.length() == 1 ) { endMonth = "0" + endMonth; }
+            if ( endDay.length() == 1 ) { endDay = "0" + endDay; }
+
             values.put(CalendarContract.Events.RRULE,
-                    "FREQ=DAILY;BYDAY=" + byDay + ";WKST=SU");
+                    "FREQ=DAILY;BYDAY=" + byDay + ";WKST=SU;UNTIL=" + endYear + endMonth + endDay + ";");
             values.put(CalendarContract.Events.DESCRIPTION,
-                    "This is a class added my MomAtCollege!");
+                    "This Class was Added by MomAtCollege!");
 
             //calculate duration
             int startHour = startDateTime.get(Calendar.HOUR_OF_DAY);
