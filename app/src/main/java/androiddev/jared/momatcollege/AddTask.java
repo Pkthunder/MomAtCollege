@@ -2,6 +2,7 @@ package androiddev.jared.momatcollege;
 
 
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -90,6 +91,9 @@ public class AddTask extends ActionBarActivity {
                     long newRowId = mDb.insert(ClassDbHelper.TASK_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+
+                    NotificationManager mNotMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    mNotMgr.cancel(2345);
 
                     finish();
                 }

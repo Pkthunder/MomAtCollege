@@ -1,10 +1,18 @@
 package androiddev.jared.momatcollege;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
+import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,6 +27,7 @@ import android.widget.TextView;
  * This code is based of http://www.piwai.info/chatheads-basics/
  * The purpose of this code is to create activity independent dialog system
  */
+
 public class FloatingPromptService extends Service {
     private static final String TAG = AddClass.class.getSimpleName();
 
@@ -28,9 +37,12 @@ public class FloatingPromptService extends Service {
     private LinearLayout outerMost;
     private LinearLayout buttonLayout;
     private LinearLayout innerLayout;
+    private Button addTask;
+    private Button cancel;
+    private int mClassId;
 
     //LAYOUT EXPLANATION:
-    //WindowManager -> outerMost -> innerLayout -> mTV && buttonLayout
+    //WindowManager -> outerMost -> innerLayout -> mTV && (buttonLayout -> 2xButtons)
     //mWM, innerLayout, and buttonLayout have corresponding params objects
     //outerMost was added to allow for both innerLayout and mWM params to co-exist
     //outerMost is also used to hack-ily add a border
@@ -42,16 +54,8 @@ public class FloatingPromptService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
+    public void onCreate() {
         Log.i(TAG, "Entered onCreate");
-
-        final int classId = intent.getIntExtra("classId", 0);
-        Log.i(TAG, "classId: " + String.valueOf(classId));
-
-        if (bActive) {
-            Log.i(TAG, "Returned Early to prevent duplicates");
-            return super.onStartCommand(intent, flags, startId);
-        }
 
         mWM = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -84,7 +88,7 @@ public class FloatingPromptService extends Service {
                 LinearLayout.LayoutParams.MATCH_PARENT
         );
 
-        Button addTask = new Button(this);
+        addTask = new Button(this);
         addTask.setText("Add Task");
         addTask.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams addTaskParams = new LinearLayout.LayoutParams(
@@ -92,18 +96,8 @@ public class FloatingPromptService extends Service {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 .4f
         );
-        addTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(FloatingPromptService.this, AddTask.class);
-                newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                newIntent.putExtra("classId", classId);
-                stopThisNonSense();
-                startActivity(newIntent);
-            }
-        });
 
-        Button cancel = new Button(this);
+        cancel = new Button(this);
         cancel.setText("Cancel");
         cancel.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(
@@ -111,12 +105,6 @@ public class FloatingPromptService extends Service {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 .4f
         );
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopThisNonSense();
-            }
-        });
 
         buttonLayout.addView(cancel, cancelParams);
         buttonLayout.addView(addTask, addTaskParams);
@@ -139,9 +127,57 @@ public class FloatingPromptService extends Service {
         params.y = 0;
 
         mWM.addView(outerMost, params);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        Log.i(TAG, "Entered onCreate");
+
+        final int classId = intent.getIntExtra("classId", 0);
+        Log.i(TAG, "classId: " + String.valueOf(classId));
+
+        if (bActive || classId == 0) {
+            Log.i(TAG, "Returned Early --- ERROR");
+            this.stopSelf();
+        }
+
+        mClassId = classId;
+
+        //Vibrate Code
+        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 500, 150, 500, 150, 500};
+        v.vibrate(pattern, -1);
+        //Plays "text" tone
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        addTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(FloatingPromptService.this, AddTask.class);
+                newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                newIntent.putExtra("classId", classId);
+                stopThisNonSense();
+                startActivity(newIntent);
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopThisNonSense();
+            }
+        });
+
         bActive = true;
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
+        //return START_STICKY;
     }
 
     @Override
@@ -149,6 +185,27 @@ public class FloatingPromptService extends Service {
         super.onDestroy();
         if (outerMost != null) {
             mWM.removeView(outerMost);
+        }
+
+        if ( mClassId != 0 ) {
+            //Create Notification
+            NotificationCompat.Builder builder =  new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle("MomAtCollege: End of Class!")
+                    .setContentText("Click here to add any homework")
+                    .setAutoCancel(true);
+
+            Intent intent = new Intent(this, AddTask.class);
+            intent.putExtra("classId", mClassId);
+
+            PendingIntent pi = PendingIntent.getActivity(
+                    this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            );
+
+            builder.setContentIntent(pi);
+
+            NotificationManager mNotMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            mNotMgr.notify(2345, builder.build());
         }
     }
 

@@ -30,9 +30,6 @@ public class AlarmService extends Service {
 
         if(newAlarm.isEnabled == 1) {
             if(newAlarm.isAfterClass == 1) {
-                //Vibrate Code
-                Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
 
                 //TODO KYLE put the location check here
                 //AlarmScreen.class should be addTask dialog
