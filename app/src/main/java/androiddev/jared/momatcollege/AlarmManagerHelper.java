@@ -141,6 +141,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         intent.putExtra(TIME_HOUR, alarm.timeHour);
         intent.putExtra(TIME_MINUTE, alarm.timeMinute);
         intent.putExtra(IS_ENABLED, alarm.isEnabled);
+        intent.putExtra("classId", alarm.classId);
 
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }

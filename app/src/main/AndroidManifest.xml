@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -39,6 +41,7 @@
         </activity>
 
         <service android:name=".AlarmService" android:enabled="true"/>
+        <service android:name=".FloatingPromptService" android:enabled="true"/>
 
         <reciever
             android:name=".AlarmManagerHelper"
