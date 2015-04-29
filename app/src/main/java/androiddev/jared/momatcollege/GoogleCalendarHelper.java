@@ -48,7 +48,7 @@ public class GoogleCalendarHelper {
         return eventId;
     }
 
-    public long createNewEventOnCalendar(ContentResolver cr, Calendar startDateTime, Calendar endDateTime,
+    public long createNewEventOnCalendar(Context context, ContentResolver cr, Calendar startDateTime, Calendar endDateTime,
                                     String daysOfWeek, String nameOfEvent, String locOfEvent, long savedCalId) {
 
         ContentValues values = new ContentValues();
