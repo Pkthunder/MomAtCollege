@@ -11,6 +11,6 @@ public class AlarmModel {
     public Long classId;
 	public int isEnabled;
     public int isAfterClass;
-	
+    public int day;
 
 }

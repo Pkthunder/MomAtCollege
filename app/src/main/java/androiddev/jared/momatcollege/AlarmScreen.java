@@ -31,9 +31,9 @@ public class AlarmScreen extends Activity {
         //Setup layout
         this.setContentView(R.layout.activity_alarm_screen);
 
-        String name = getIntent().getStringExtra(AlarmManagerHelper.NAME);
-        int timeHour = getIntent().getIntExtra(AlarmManagerHelper.TIME_HOUR, 0);
-        int timeMinute = getIntent().getIntExtra(AlarmManagerHelper.TIME_MINUTE, 0);
+        String name = getIntent().getStringExtra("name");
+        int timeHour = getIntent().getIntExtra("timeHour", 0);
+        int timeMinute = getIntent().getIntExtra("timeMinute", 0);
 
         TextView tvName = (TextView) findViewById(R.id.alarm_screen_name);
         tvName.setText(name);
@@ -55,6 +55,8 @@ public class AlarmScreen extends Activity {
         mPlayer = new MediaPlayer();
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
+
+        //TODO make this a real sound
         if(alert == null){
             // alert is null, using backup
             alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);

@@ -124,22 +124,16 @@ public class AddClass extends ActionBarActivity {
                     //Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
                     addAlarmDatabaseEntry(alarmValues, newRowId, 0);
-                    Log.i(TAG, alarmValues.toString());
-
-                    long newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
-                    String s = String.valueOf(newAlarmRowID);
-                    Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
-
-                    AlarmManagerHelper.setAlarms(getApplicationContext());
+                    multipleInsert(alarmValues);
 
                     addAlarmDatabaseEntry(alarmValues, newRowId, 1);
-                    Log.i(TAG, alarmValues.toString());
+                    multipleInsert(alarmValues);
 
-                    newAlarmRowID = mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
-                    s = String.valueOf(newAlarmRowID);
-                    Log.i(TAG," (id:" + newAlarmRowID + ") Successfully Added!" );
 
-                    AlarmManagerHelper.setAlarms(getApplicationContext());
+
+                    long nextAlarmId = AlarmManagerHelper.getNextAlarmId(getApplicationContext());
+                    Log.i(TAG,"nextAlarmId = " + nextAlarmId);
+                    AlarmManagerHelper.setAlarm(getApplicationContext(), nextAlarmId);
 
                     finish();
                 }
@@ -452,7 +446,7 @@ public class AddClass extends ActionBarActivity {
 
             //TODO do we want to do this?? (must be less that 60 for this setup, also will not update if changed)
             //alarmPreference can be set in the settings
-            int alarmPreference = 30;
+            int alarmPreference = 1;
 
             //adjusts time to 'alarmPreference' prior to class starting
             if (m < alarmPreference) {
@@ -460,7 +454,7 @@ public class AddClass extends ActionBarActivity {
                 int temp = alarmPreference - m;
                 m = 60 - temp;
             } else {
-                m = m - 30;
+                m = m - alarmPreference;
             }
 
             //alarm time hour
@@ -490,7 +484,7 @@ public class AddClass extends ActionBarActivity {
 
         //Repeating Days
         String repeating_days = "";
-        for (int i=0; i<6; i++) {
+        for (int i=0; i<7; i++) {
             if (weekdaySelections[i]) {
                 repeating_days += "1";
             }
@@ -515,4 +509,19 @@ public class AddClass extends ActionBarActivity {
         return true;
     }
 
+    public void multipleInsert( ContentValues alarmValues ){
+        ClassDbHelper mDbHelper = new ClassDbHelper(getApplicationContext());
+        SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
+
+        for( int i = 0; i < 7; i++){
+            if( alarmValues.getAsString(ClassDbHelper.ALARM_FIELDS[5]).substring(i,i+1).equals("1")){
+
+                int temp = AlarmManagerHelper.convertDayToCal(i);
+
+                alarmValues.put(ClassDbHelper.ALARM_FIELDS[9], temp);
+                mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
+                Log.i(TAG, "ALARM INSERTED");
+            }
+        }
+    }
 }

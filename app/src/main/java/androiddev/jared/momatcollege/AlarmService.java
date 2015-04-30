@@ -25,6 +25,8 @@ public class AlarmService extends Service {
         ClassDbHelper dbHelper = new ClassDbHelper(getApplicationContext());
         AlarmModel newAlarm = dbHelper.getAlarm(ala_id);
 
+        Log.i(TAG, "isEnabled = " + newAlarm.isEnabled );
+        Log.i(TAG, "isAfterClass = " + newAlarm.isAfterClass );
 
 
         if(newAlarm.isEnabled == 1) {
@@ -43,7 +45,10 @@ public class AlarmService extends Service {
                 getApplication().startActivity(alarmIntent);
             }
         }
-		
+
+        long nextAlarmId = AlarmManagerHelper.getNextAlarmId(getApplicationContext());
+        AlarmManagerHelper.setAlarm(getApplicationContext(), nextAlarmId);
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
