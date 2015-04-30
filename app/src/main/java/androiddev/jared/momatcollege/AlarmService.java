@@ -1,11 +1,17 @@
 package androiddev.jared.momatcollege;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
+
+import java.util.Calendar;
 
 public class AlarmService extends Service {
 
@@ -45,6 +51,18 @@ public class AlarmService extends Service {
                 alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 alarmIntent.putExtras(intent);
                 getApplication().startActivity(alarmIntent);
+
+                Context context = getApplicationContext();
+
+                Calendar mCal = Calendar.getInstance();
+                mCal.setTimeInMillis(mCal.getTimeInMillis() + (30 * 60 *1000) );
+
+                PendingIntent pIntent = createPendingIntent(context, newAlarm.classId);
+
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, mCal.getTimeInMillis(), pIntent);
+
+
             }
         }
 
@@ -53,5 +71,25 @@ public class AlarmService extends Service {
 
 		return super.onStartCommand(intent, flags, startId);
 	}
+
+    private static PendingIntent createPendingIntent(Context context, long classID) {
+        //Intent mIntent = new Intent(context, ProxAlertHelper.class);
+        Intent mIntent = new Intent(context, AlarmService.class);
+
+        ClassDbHelper mHelper = new ClassDbHelper(context);
+        SQLiteDatabase mDb = mHelper.getWritableDatabase();
+
+        Cursor c = mDb.rawQuery("SELECT * FROM " + ClassDbHelper.CLASS_TABLE_NAME +
+                " WHERE " + ClassDbHelper.CLASS_FIELDS[0] + " = " +
+                String.valueOf(classID) + "", null);
+
+        if (!c.moveToFirst()) {
+            mIntent.putExtra("classId", c.getLong(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[0])));
+            mIntent.putExtra("latitude", c.getDouble(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[13])));
+            mIntent.putExtra("longitude", c.getDouble(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[14])));
+        }
+
+        return PendingIntent.getService(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 	
 }

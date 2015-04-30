@@ -93,6 +93,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         intent.putExtra("timeHour", alarm.timeHour);
         intent.putExtra("timeMinute", alarm.timeMinute);
         intent.putExtra("isEnabled", alarm.isEnabled);
+        intent.putExtra("classId", alarm.classId);
 
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -108,9 +109,6 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                     " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
                     String.valueOf(dayVal) + "", null);
 
-            Log.i(TAG, "SELECT * FROM " + ClassDbHelper.ALARM_TABLE_NAME +
-                    " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
-                    String.valueOf(dayVal) + "");
 
             if (!c.moveToFirst()) {
 
