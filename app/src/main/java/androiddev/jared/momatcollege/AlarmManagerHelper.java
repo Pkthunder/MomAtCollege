@@ -19,114 +19,71 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
     public static String TAG = AlarmManagerHelper.class.getSimpleName();
 
-@Override
+    @Override
     public void onReceive(Context context, Intent intent) {
-       // setAlarms(context);
+        // setAlarms(context);
     }
 
-    public static void setAlarms(Context context) {
-        cancelAlarms(context);
+    //set the next alarm
+    public static void setAlarm(Context context, long alarmId) {
 
+        //cancelAlarm(context);
+
+        Log.i(TAG, "alarm id = " + alarmId);
+
+        //get alarm from DB
         ClassDbHelper dbHelper = new ClassDbHelper(context);
+        AlarmModel alarm = dbHelper.getAlarm(alarmId);
 
-        List<AlarmModel> alarms =  dbHelper.getAlarms();
+        Calendar mCal = Calendar.getInstance();
 
-//        Log.i(TAG, "JUST BEFORE WEEKLY CHECK");
+        Calendar nextAlarm = Calendar.getInstance();
+        nextAlarm.set(Calendar.HOUR_OF_DAY, alarm.timeHour);
+        nextAlarm.set(Calendar.MINUTE, alarm.timeMinute);
+        nextAlarm.set(Calendar.DAY_OF_WEEK, alarm.day);
 
-        int numOfAlarms = 0;
-        for (AlarmModel alarm : alarms) {
-            if (alarm.isEnabled == 1) {
-                numOfAlarms ++;
-                Log.i(TAG, "numOfAlarms = " + numOfAlarms);
+        DateFormat TBF = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+        String BRUH = TBF.format(nextAlarm.getTime());
+        Log.i(TAG, "Pending Intent set for " + BRUH );
 
+        Log.i(TAG, "alarm.day = " + alarm.day );
+        Log.i(TAG, "mCal = " + mCal.get(Calendar.DAY_OF_WEEK));
 
-//                Log.i(TAG, "isEnabled = " + Integer.toString(alarm.isEnabled));
-
-//                Log.i(TAG, alarm.name);
-//                Log.i(TAG, "Hour = " + Integer.toString(alarm.timeHour));
-//                Log.i(TAG, "Minute = " + Integer.toString(alarm.timeMinute));
-//                Log.i(TAG, "Days = " + alarm.repeatingDays);
-//                Log.i(TAG, "classID = " + Long.toString(alarm.classId));
-//                Log.i(TAG, "sub = " + alarm.repeatingDays.substring(1,2));
-
-                PendingIntent pIntent = createPendingIntent(context, alarm);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, alarm.timeHour);
-                calendar.set(Calendar.MINUTE, alarm.timeMinute);
-                calendar.set(Calendar.SECOND, 00);
-
-                Log.i(TAG, "Current time is : " + calendar.get(Calendar.HOUR_OF_DAY));
-
-                //TODO: Use a switch bruh
-
-                for( int i = 0; i < 6; i++){
-                    if( alarm.repeatingDays.substring(i,i+1).equals("1")){
-                        switch(i){
-                            case 0: //MON
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 1: //TUES
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 2: //WEDNES
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 3://THURS
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 4://FRI
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 5://SAT
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-
-                            case 6://SUN
-                                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                                setAlarm(context, calendar, pIntent);
-                                break;
-                        }
-                    }
-                }
-            }
+        if( alarm.day < mCal.get(Calendar.DAY_OF_WEEK )){
+            nextAlarm.setTimeInMillis(nextAlarm.getTimeInMillis() + (86400 * 7 * 1000) );
         }
-    }
 
-    @SuppressLint("NewApi")
-    private static void setAlarm(Context context, Calendar calendar, PendingIntent pIntent) {
+        BRUH = TBF.format(nextAlarm.getTime());
+        Log.i(TAG, "Pending Intent set for " + BRUH );
+
+        //create pending intent for alarm
+        PendingIntent pIntent = createPendingIntent(context, alarm);
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlarm.getTimeInMillis(), pIntent);
+
+        BRUH = TBF.format(nextAlarm.getTime());
+        Log.i(TAG, "Pending Intent set for " + BRUH );
 
     }
 
-    public static void cancelAlarms(Context context) {
-        ClassDbHelper dbHelper = new ClassDbHelper(context);
 
-        List<AlarmModel> alarms =  dbHelper.getAlarms();
 
-        if (alarms != null) {
-            for (AlarmModel alarm : alarms) {
-                if (alarm.isEnabled == 1) {
-                    PendingIntent pIntent = createPendingIntent(context, alarm);
+//    public static void cancelAlarm(Context context) {
+//
+//        long cancelAlarmId = findNextAlarm(context);
+//
+//        ClassDbHelper dbHelper = new ClassDbHelper(context);
+//        AlarmModel alarm = dbHelper.getAlarm(cancelAlarmId);
+//
+//        PendingIntent pIntent = createPendingIntent(context, alarm);
+//
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.cancel(pIntent);
+//
+//    }
 
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.cancel(pIntent);
-                }
-            }
-        }
-    }
+
     private static PendingIntent createPendingIntent(Context context, AlarmModel alarm) {
         Intent intent = new Intent(context, AlarmService.class);
 
@@ -138,5 +95,76 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         intent.putExtra("isEnabled", alarm.isEnabled);
 
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    //returns -1 on
+    public static long getNextAlarmId(Context context) {
+        Calendar mCal = Calendar.getInstance();
+        for ( int i=0; i<7; i++ ) {
+            int dayVal = mCal.get(Calendar.DAY_OF_WEEK);
+            ClassDbHelper mHelper = new ClassDbHelper(context);
+            SQLiteDatabase mDb = mHelper.getReadableDatabase();
+            Cursor c = mDb.rawQuery("SELECT * FROM " + ClassDbHelper.ALARM_TABLE_NAME +
+                    " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
+                    String.valueOf(dayVal) + "", null);
+
+            Log.i(TAG, "SELECT * FROM " + ClassDbHelper.ALARM_TABLE_NAME +
+                    " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
+                    String.valueOf(dayVal) + "");
+
+            if (!c.moveToFirst()) {
+
+                mCal.set(Calendar.HOUR_OF_DAY, 0);
+                mCal.set(Calendar.MINUTE, 0);
+                mCal.setTimeInMillis( mCal.getTimeInMillis() + (24*60*60*1000));
+                continue;
+            }
+            Log.i(TAG, "Anything found in DB");
+
+            long timeDiff = 600000000;
+            long currentClosestAlarmId = -1;
+            //while (!c.isAfterLast()) {
+            for(c.moveToFirst(); c.moveToNext();){
+                long compareVal = 0;
+                long todayMillis = mCal.getTimeInMillis();
+                Calendar alarmCal = Calendar.getInstance();
+                alarmCal.setTimeInMillis(mCal.getTimeInMillis());
+                alarmCal.set(Calendar.HOUR_OF_DAY, c.getInt(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[3])));
+                alarmCal.set(Calendar.MINUTE, c.getInt(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[4])));
+                compareVal = alarmCal.getTimeInMillis() - todayMillis;
+                if (compareVal <= 0) {
+                    continue;
+                }
+                if(timeDiff > compareVal) {
+                    timeDiff = compareVal;
+                    currentClosestAlarmId = c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[0]));
+                }
+                //c.moveToNext();
+            }
+            if (currentClosestAlarmId == -1) {
+                mCal.set(Calendar.HOUR_OF_DAY, 0);
+                mCal.set(Calendar.MINUTE, 0);
+                mCal.setTimeInMillis( mCal.getTimeInMillis() + (24*60*60*1000));
+                continue;
+            }
+            return currentClosestAlarmId;
+        }
+        return -1;
+    }
+
+    //convert from the the AddClass order to Calendar object order
+    public static int convertDayToCal( int calendarDay ) {
+        switch (calendarDay) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return calendarDay + 2;
+            case 6:
+                return 1;
+        }
+        return -1;
     }
 }
