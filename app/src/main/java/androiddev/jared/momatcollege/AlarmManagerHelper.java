@@ -107,9 +107,6 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                     " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
                     String.valueOf(dayVal) + "", null);
 
-            Log.i(TAG, "SELECT * FROM " + ClassDbHelper.ALARM_TABLE_NAME +
-                    " WHERE " + ClassDbHelper.ALARM_FIELDS[9] + " = " +
-                    String.valueOf(dayVal) + "");
 
             if (!c.moveToFirst()) {
 
