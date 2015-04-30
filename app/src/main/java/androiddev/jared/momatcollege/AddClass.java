@@ -123,6 +123,8 @@ public class AddClass extends ActionBarActivity {
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
+
+                    //adds the alarm
                     addAlarmDatabaseEntry(alarmValues, newRowId, 0);
                     multipleInsert(alarmValues);
 
@@ -526,6 +528,18 @@ public class AddClass extends ActionBarActivity {
                 alarmValues.put(ClassDbHelper.ALARM_FIELDS[9], temp);
                 mDb.insert(ClassDbHelper.ALARM_TABLE_NAME, null, alarmValues);
                 Log.i(TAG, "ALARM INSERTED");
+//
+//
+//                Log.i(TAG, "alarm id when pend = " + alarmValues.getAsLong(ClassDbHelper.ALARM_FIELDS[0]));
+//                Calendar nextAlarm = Calendar.getInstance();
+//                nextAlarm.set(Calendar.HOUR_OF_DAY, alarmValues.getAsInteger(ClassDbHelper.ALARM_FIELDS[3]));
+//                nextAlarm.set(Calendar.MINUTE, alarmValues.getAsInteger(ClassDbHelper.ALARM_FIELDS[4]));
+//                nextAlarm.set(Calendar.DAY_OF_WEEK, alarmValues.getAsInteger(ClassDbHelper.ALARM_FIELDS[9]));
+//                DateFormat TBF = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+//                String BRUH = TBF.format(nextAlarm.getTime());
+//                Log.i(TAG, "Pending Intent set for " + BRUH );
+
+
             }
         }
     }

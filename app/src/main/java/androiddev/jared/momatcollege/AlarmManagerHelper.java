@@ -44,7 +44,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
         DateFormat TBF = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
         String BRUH = TBF.format(nextAlarm.getTime());
-        Log.i(TAG, "Pending Intent set for " + BRUH );
+//        Log.i(TAG, "Pending Intent set for " + BRUH );
 
         Log.i(TAG, "alarm.day = " + alarm.day );
         Log.i(TAG, "mCal = " + mCal.get(Calendar.DAY_OF_WEEK));
@@ -53,8 +53,8 @@ public class AlarmManagerHelper extends BroadcastReceiver {
             nextAlarm.setTimeInMillis(nextAlarm.getTimeInMillis() + (86400 * 7 * 1000) );
         }
 
-        BRUH = TBF.format(nextAlarm.getTime());
-        Log.i(TAG, "Pending Intent set for " + BRUH );
+//        BRUH = TBF.format(nextAlarm.getTime());
+//        Log.i(TAG, "Pending Intent set for " + BRUH );
 
         //create pending intent for alarm
         PendingIntent pIntent = createPendingIntent(context, alarm);
@@ -119,12 +119,20 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 mCal.setTimeInMillis( mCal.getTimeInMillis() + (24*60*60*1000));
                 continue;
             }
+            Log.i(TAG, "alarm id before = " + c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[0])));
             Log.i(TAG, "Anything found in DB");
 
             long timeDiff = 600000000;
             long currentClosestAlarmId = -1;
             //while (!c.isAfterLast()) {
-            for(c.moveToFirst(); c.moveToNext();){
+            int alarmsChecked = 0;
+            for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
+
+                Log.i(TAG, "alarm id after = " + c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[0])));
+
+                alarmsChecked++;
+                Log.i(TAG, "Alarms checked = " + alarmsChecked);
+
                 long compareVal = 0;
                 long todayMillis = mCal.getTimeInMillis();
                 Calendar alarmCal = Calendar.getInstance();
@@ -132,12 +140,17 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 alarmCal.set(Calendar.HOUR_OF_DAY, c.getInt(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[3])));
                 alarmCal.set(Calendar.MINUTE, c.getInt(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[4])));
                 compareVal = alarmCal.getTimeInMillis() - todayMillis;
+
+                Log.i(TAG, "compareVal = " + compareVal );
+                Log.i(TAG, "timeDiff = " + timeDiff);
+
                 if (compareVal <= 0) {
                     continue;
                 }
                 if(timeDiff > compareVal) {
                     timeDiff = compareVal;
                     currentClosestAlarmId = c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[0]));
+                    Log.i(TAG, "new timeDiff = " + timeDiff);
                 }
                 //c.moveToNext();
             }
