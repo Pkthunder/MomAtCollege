@@ -34,6 +34,7 @@ public class ViewClass extends ActionBarActivity {
     private TextView mfrequency;
     private TextView mTimeOfDay;
     private Button showTeacherNotes;
+    private Button saveClassLocation;
     private ListView lv;
 
     @Override
@@ -48,6 +49,15 @@ public class ViewClass extends ActionBarActivity {
         mfrequency = (TextView) findViewById(R.id.frequency);
         mTimeOfDay = (TextView) findViewById(R.id.timeOfDay);
         showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
+        saveClassLocation = (Button) findViewById(R.id.save_location);
+        saveClassLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Kyle's code
+                //currently do nothing
+
+            }
+        });
 
         lv = (ListView) findViewById(R.id.class_info_list);
 
@@ -186,6 +196,7 @@ public class ViewClass extends ActionBarActivity {
                     alert.create().show();
                 }
             });
+
         } else {
             return false;
         }
