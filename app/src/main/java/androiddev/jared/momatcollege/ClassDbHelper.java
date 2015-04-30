@@ -18,7 +18,7 @@ import java.util.List;
 public class ClassDbHelper extends SQLiteOpenHelper {
 
     public static String TAG = ClassDbHelper.class.getSimpleName();
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
     public static final String DB_NAME = "MomAtCollegeDb";
 
     //////////////////////////////////////////////////////////////////  Class Table ///////////////////////////////////////////////////////////////////////
@@ -98,8 +98,8 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     //////////////////////////////////////////////////////////////////  Alarm Table ///////////////////////////////////////////////////////////////////////
 
     public static final String ALARM_TABLE_NAME = "alarmDb";
-    public static final String[] ALARM_FIELDS = {"id", "classId", "alarm_name", "alarm_time_hour",
-            "alarm_time_minute", "alarm_repeat_days", "alarm_repeat_weekly", "alarm_enabled", "alarm_isAfterClass", "alarm_day"};
+    public static final String[] ALARM_FIELDS = {"id", "classId", "alarm_name", "alarm_time_hour", //0-3
+            "alarm_time_minute", "alarm_repeat_days", "alarm_repeat_weekly", "alarm_enabled", "alarm_isAfterClass", "alarm_day"}; //4-9
 
 
     private static final String ALARM_TABLE_CREATE =

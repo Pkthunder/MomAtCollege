@@ -39,7 +39,7 @@ public class FloatingPromptService extends Service {
     private LinearLayout innerLayout;
     private Button addTask;
     private Button cancel;
-    private int mClassId;
+    private long mClassId;
 
     //LAYOUT EXPLANATION:
     //WindowManager -> outerMost -> innerLayout -> mTV && (buttonLayout -> 2xButtons)
@@ -133,7 +133,7 @@ public class FloatingPromptService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
         Log.i(TAG, "Entered onCreate");
 
-        final int classId = intent.getIntExtra("classId", 0);
+        final long classId = intent.getLongExtra("classId", 0);
         Log.i(TAG, "classId: " + String.valueOf(classId));
 
         if (bActive || classId == 0) {
@@ -161,7 +161,7 @@ public class FloatingPromptService extends Service {
             public void onClick(View v) {
                 Intent newIntent = new Intent(FloatingPromptService.this, AddTask.class);
                 newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                newIntent.putExtra("classId", classId);
+                newIntent.putExtra("classId", (int) classId);
                 stopThisNonSense();
                 startActivity(newIntent);
             }
@@ -196,7 +196,7 @@ public class FloatingPromptService extends Service {
                     .setAutoCancel(true);
 
             Intent intent = new Intent(this, AddTask.class);
-            intent.putExtra("classId", mClassId);
+            intent.putExtra("classId", (int) mClassId);
 
             PendingIntent pi = PendingIntent.getActivity(
                     this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT

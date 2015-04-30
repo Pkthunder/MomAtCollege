@@ -1,11 +1,10 @@
 package androiddev.jared.momatcollege;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AlarmService extends Service {
 
@@ -35,10 +34,22 @@ public class AlarmService extends Service {
 
                 //TODO KYLE put the location check here
                 //AlarmScreen.class should be addTask dialog
-                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
-                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                alarmIntent.putExtras(intent);
-                getApplication().startActivity(alarmIntent);
+//                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
+//                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                alarmIntent.putExtras(intent);
+//                getApplication().startActivity(alarmIntent);
+                long classId = intent.getLongExtra("classId", -1);
+                if ( classId == -1 ) {
+                    Log.i(TAG, "Internal Error, no classId: " + String.valueOf(classId));
+                    Toast.makeText(getApplicationContext(), "Internal Error, no classId", Toast.LENGTH_LONG).show();
+                    return super.onStartCommand(intent, flags, startId);
+                }
+
+                Intent floatingPrompt = new Intent(this, FloatingPromptService.class);
+                floatingPrompt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                floatingPrompt.putExtra("classId",classId);
+                getApplication().startService(floatingPrompt);
+                return super.onStartCommand(intent, flags, startId);
             }
             else{
                 Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);

@@ -2,15 +2,17 @@ package androiddev.jared.momatcollege;
 
 import android.app.AlertDialog;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,12 +37,20 @@ public class ViewClass extends ActionBarActivity {
     private TextView mTimeOfDay;
     private Button showTeacherNotes;
     private Button saveClassLocation;
+    LocationManager locMgr;
     private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_class);
+
+        Intent currIntent = getIntent();
+        final int classId = currIntent.getIntExtra("classId", 0);
+        if ( classId == 0 ) {
+            Toast.makeText(getApplicationContext(), "Invalid ClassId", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         //Displays all the information about the class selected
         mClassName = (TextView) findViewById(R.id.class_name);
@@ -50,11 +60,33 @@ public class ViewClass extends ActionBarActivity {
         mTimeOfDay = (TextView) findViewById(R.id.timeOfDay);
         showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
         saveClassLocation = (Button) findViewById(R.id.save_location);
+
+        locMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         saveClassLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: Kyle's code
-                //currently do nothing
+                Location location = locMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                    Toast.makeText(getApplicationContext(), "No last known location. ", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ClassDbHelper mDbHelper = new ClassDbHelper(getApplicationContext());
+                SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
+
+                try {
+                    mDb.rawQuery("UPDATE " + ClassDbHelper.CLASS_TABLE_NAME +
+                            " SET " + ClassDbHelper.CLASS_FIELDS[13] + " = " + String.valueOf(location.getLongitude()) +
+                            ", " + ClassDbHelper.CLASS_FIELDS[14] + " = " + String.valueOf(location.getLatitude()) +
+                            " WHERE " + ClassDbHelper.CLASS_FIELDS[0] + " = " + String.valueOf(classId), null );
+
+                    Toast.makeText(getApplicationContext(), "Location Saved Successfully\n" +
+                           String.valueOf(location.getLongitude() + ", " + String.valueOf(location.getLatitude())),
+                           Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -62,12 +94,12 @@ public class ViewClass extends ActionBarActivity {
         lv = (ListView) findViewById(R.id.class_info_list);
 
         //TESTING
-        Intent currIntent = getIntent();
-        int classId = currIntent.getIntExtra("classId", 0);
-        Log.i("VIEWCLASS", String.valueOf(classId));
-        Intent intent = new Intent(getApplicationContext(), FloatingPromptService.class);
-        intent.putExtra("classId",classId);
-        startService(intent);
+        //Intent currIntent = getIntent();
+        //int classId = currIntent.getIntExtra("classId", 0);
+        //Log.i("VIEWCLASS", String.valueOf(classId));
+        //Intent intent = new Intent(getApplicationContext(), FloatingPromptService.class);
+        //intent.putExtra("classId",classId);
+        //startService(intent);
     }
 
     @Override

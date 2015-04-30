@@ -1,6 +1,5 @@
 package androiddev.jared.momatcollege;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -13,7 +12,6 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 public class AlarmManagerHelper extends BroadcastReceiver {
 
@@ -93,6 +91,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         intent.putExtra("timeHour", alarm.timeHour);
         intent.putExtra("timeMinute", alarm.timeMinute);
         intent.putExtra("isEnabled", alarm.isEnabled);
+        intent.putExtra("classId", alarm.classId);
 
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
