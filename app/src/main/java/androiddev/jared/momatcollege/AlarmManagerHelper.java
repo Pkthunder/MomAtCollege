@@ -124,7 +124,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
             long timeDiff = 600000000;
             long currentClosestAlarmId = -1;
-            //while (!c.isAfterLast()) {
+
             int alarmsChecked = 0;
             for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
 
