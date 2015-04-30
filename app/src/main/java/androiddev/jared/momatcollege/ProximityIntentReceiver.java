@@ -1,4 +1,4 @@
-//correct package name here
+package androiddev.jared.momatcollege;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -39,7 +39,7 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
                             Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
                             Calendar.getInstance().get(Calendar.MINUTE)))
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.ic_menu_notifications)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                             //.setWhen(System.currentTimeMillis())
                     .setDefaults(Notification.DEFAULT_VIBRATE)
                     .build();
@@ -61,7 +61,7 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
                             Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
                             Calendar.getInstance().get(Calendar.MINUTE)))
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.ic_menu_notifications)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                             //.setWhen(System.currentTimeMillis())
                     .setDefaults(Notification.DEFAULT_VIBRATE)
                     .build();

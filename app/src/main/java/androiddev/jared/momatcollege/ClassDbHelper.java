@@ -18,14 +18,14 @@ import java.util.List;
 public class ClassDbHelper extends SQLiteOpenHelper {
 
     public static String TAG = ClassDbHelper.class.getSimpleName();
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
     public static final String DB_NAME = "MomAtCollegeDb";
 
     //////////////////////////////////////////////////////////////////  Class Table ///////////////////////////////////////////////////////////////////////
     public static final String CLASS_TABLE_NAME = "classDb";
-    public static final String[] CLASS_FIELDS = {"id", "class_name", "location", "teacher_name",
-            "teacher_notes", "frequency", "start_date_time", "end_date_time", "class_type",
-            "auto_alarms_bool", "calEventId"};
+    public static final String[] CLASS_FIELDS = {"id", "class_name", "location", "teacher_name", //0-3
+            "teacher_notes", "frequency", "start_date_time", "end_date_time", "class_type", //4-8
+            "auto_alarms_bool", "calEventId", "missClassCount", "leftEarlyCount", "longitude", "latitude"}; //9-14
 
     private static final String CLASS_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE_NAME + " (" +
@@ -39,7 +39,11 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     CLASS_FIELDS[7] + " datetime NOT NULL, " +
                     CLASS_FIELDS[8] + " text NOT NULL, " +
                     CLASS_FIELDS[9] + " tinyint(1) NOT NULL, " +
-                    CLASS_FIELDS[10] + " BIGINT NOT NULL);";
+                    CLASS_FIELDS[10] + " BIGINT NOT NULL, " +
+                    CLASS_FIELDS[11] + " INTEGER NOT NULL, " +
+                    CLASS_FIELDS[12] + " INTEGER NOT NULL, " +
+                    CLASS_FIELDS[13] + " DOUBLE NOT NULL, " +
+                    CLASS_FIELDS[14] + " DOUBLE NOT NULL );";
 
     public static final String CLASS_SELECT_ALL = "SELECT * FROM " + CLASS_TABLE_NAME;
     public static String classSelectById( int classId ) {

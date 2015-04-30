@@ -121,7 +121,7 @@ public class AddClass extends ActionBarActivity {
 
                     long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
-                    //Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
                     addAlarmDatabaseEntry(alarmValues, newRowId, 0);
                     multipleInsert(alarmValues);
@@ -414,6 +414,11 @@ public class AddClass extends ActionBarActivity {
         //Alarms Boolean
         CheckBox alarmBoolean = (CheckBox) findViewById(R.id.alarmInput);
         values.put(ClassDbHelper.CLASS_FIELDS[9], alarmBoolean.isChecked());
+
+        values.put(ClassDbHelper.CLASS_FIELDS[11], 0);
+        values.put(ClassDbHelper.CLASS_FIELDS[12], 0);
+        values.put(ClassDbHelper.CLASS_FIELDS[13], 0);
+        values.put(ClassDbHelper.CLASS_FIELDS[14], 0);
 
         //Not an error, just using the variable
         errorMsg = className.getText().toString();

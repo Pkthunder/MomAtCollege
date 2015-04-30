@@ -62,22 +62,31 @@
         android:padding="0dp"
         android:layout_margin="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/display_teacher_notes"
-            android:text="@string/display_teacher_notes"
-            android:layout_margin="0dp"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/display_teacher_notes"-->
+            <!--android:text="@string/display_teacher_notes"-->
+            <!--android:layout_margin="0dp"-->
+            <!--android:textAppearance="?android:attr/textAppearanceSmall" />-->
 
-       <Button
-            style="?android:attr/buttonStyleSmall"
+        <Button
+            style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight=".4"
             android:layout_margin="0dp"
-            android:layout_marginLeft="15dp"
-            android:text="Show"
+            android:text="Show Teacher Notes"
             android:id="@+id/teacher_notes_btn" />
+
+        <Button
+            style="?android:attr/buttonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".4"
+            android:layout_margin="0dp"
+            android:text="Save Class Location"
+            android:id="@+id/save_location" />
 
     </LinearLayout>
 

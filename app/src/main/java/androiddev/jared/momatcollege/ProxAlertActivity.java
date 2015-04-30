@@ -1,4 +1,4 @@
-// correct package name here
+package androiddev.jared.momatcollege;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -76,12 +76,12 @@ public class ProxAlertActivity extends Activity {
 
     private void saveProximityAlertPoint() {
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location==null) {
+        if (location == null) {
             Toast.makeText(this, "No last known location. ", Toast.LENGTH_LONG).show();
             return;
         }
-        saveCoordinatesInPreferences((float)location.getLatitude(), (float)location.getLongitude());
-        addProximityAlert( location.getLatitude(), location.getLongitude() );
+        saveCoordinatesInPreferences((float) location.getLatitude(), (float) location.getLongitude());
+        addProximityAlert(location.getLatitude(), location.getLongitude());
     }
 
     private void addProximityAlert(double latitude, double longitude) {
@@ -98,14 +98,14 @@ public class ProxAlertActivity extends Activity {
                 proximityIntent // will be used to generate an Intent to fire when entry to or exit from the alert region is detected
         );
 
-       IntentFilter filter = new IntentFilter(PROX_ALERT_INTENT);
-       registerReceiver(new ProximityIntentReceiver(), filter);
+        IntentFilter filter = new IntentFilter(PROX_ALERT_INTENT);
+        registerReceiver(new ProximityIntentReceiver(), filter);
 
     }
 
     private void populateCoordinatesFromLastKnownLocation() {
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location!=null) {
+        if (location != null) {
             latitudeEditText.setText(nf.format(location.getLatitude()));
             longitudeEditText.setText(nf.format(location.getLongitude()));
         }
@@ -134,11 +134,15 @@ public class ProxAlertActivity extends Activity {
             Toast.makeText(ProxAlertActivity.this,
                     "Distance from Point: " + distance, Toast.LENGTH_LONG).show();
         }
+
         public void onStatusChanged(String s, int i, Bundle b) {
         }
+
         public void onProviderDisabled(String s) {
         }
+
         public void onProviderEnabled(String s) {
         }
     }
+}
 
