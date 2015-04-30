@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,13 @@ public class ViewClass extends ActionBarActivity {
 
         lv = (ListView) findViewById(R.id.class_info_list);
 
+        //TESTING
+        Intent currIntent = getIntent();
+        int classId = currIntent.getIntExtra("classId", 0);
+        Log.i("VIEWCLASS", String.valueOf(classId));
+        Intent intent = new Intent(getApplicationContext(), FloatingPromptService.class);
+        intent.putExtra("classId",classId);
+        startService(intent);
     }
 
     @Override
@@ -59,6 +67,10 @@ public class ViewClass extends ActionBarActivity {
         //Gets the classId passed to Activity by the intent
         Intent intent = getIntent();
         int classId = intent.getIntExtra("classId", 0);
+        if ( classId == 0 ) {
+            Toast.makeText(getApplicationContext(), "Invalid ClassId", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         //Gets data from database
         if (!getClassDatabaseData(classId)) {
@@ -160,6 +172,7 @@ public class ViewClass extends ActionBarActivity {
             showTeacherNotes.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     AlertDialog.Builder alert = new AlertDialog.Builder(ViewClass.this);
                     String msg = c.getString(c.getColumnIndex(ClassDbHelper.CLASS_FIELDS[4]));
                     alert.setMessage(msg);

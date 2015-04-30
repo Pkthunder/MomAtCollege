@@ -3,16 +3,12 @@ package androiddev.jared.momatcollege;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -20,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Methods to access the Google Calendar Content Provider
  */
 public class GoogleCalendarHelper {
-    private static final String TAG = GoogleCalendarHelper.class.getSimpleName();
+    //private static final String TAG = GoogleCalendarHelper.class.getSimpleName();
 
     private static final String GCH_ACCOUNT_NAME = "androiddev.jared.momatcollege";
     private static final String GCH_CAL_NAME = "MomAtCollege Calendar";
@@ -100,9 +96,6 @@ public class GoogleCalendarHelper {
         }
 
         values.put(CalendarContract.Events.DTSTART, startDateTime.getTimeInMillis());
-        //values.put(CalendarContract.Events.DTEND, endDateTime.getTimeInMillis());
-        //values.put(CalendarContract.Events.DURATION, "PT1H");
-
         values.put(CalendarContract.Events.TITLE, nameOfEvent);
         values.put(CalendarContract.Events.EVENT_LOCATION, locOfEvent);
         values.put(CalendarContract.Events.CALENDAR_ID, savedCalId);
@@ -116,7 +109,6 @@ public class GoogleCalendarHelper {
 
         Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
         long eventId = new Long(uri.getLastPathSegment());
-        Toast.makeText(context, "Created Event! (id:" + eventId + ")", Toast.LENGTH_LONG).show();
 
         return eventId;
     }

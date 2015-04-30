@@ -1,9 +1,10 @@
 package androiddev.jared.momatcollege;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 
 public class AlarmService extends Service {
@@ -31,6 +32,7 @@ public class AlarmService extends Service {
 
         if(newAlarm.isEnabled == 1) {
             if(newAlarm.isAfterClass == 1) {
+
                 //TODO KYLE put the location check here
                 //AlarmScreen.class should be addTask dialog
                 Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
