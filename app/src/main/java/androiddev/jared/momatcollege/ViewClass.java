@@ -154,7 +154,7 @@ public class ViewClass extends ActionBarActivity {
 
     public void addAClass(){
         //DONE: Intent to navigate to add a class
-        Intent intent = new Intent(ViewClass.this, AddTask.class);
+        Intent intent = new Intent(ViewClass.this, AddClass.class);
         startActivity(intent);
     }
 

@@ -7,12 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * Created by Jared on 4/15/2015.
  * This class simply is a Class Db Table Help Object
  */
 public class ClassDbHelper extends SQLiteOpenHelper {
@@ -136,34 +132,10 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-//
-//    private static final String SQL_DELETE_ALARM =
-//            "DROP TABLE IF EXISTS " + Alarm.ALARM_TABLE_NAME;
-
-//    public AlarmDBHelper(Context context) {
-//        super(context, DB_NAME, null, DB_VERSION);
-//    }
-
-//
-    public AlarmModel populateModel(Cursor c) {
-        AlarmModel model = new AlarmModel();
-        model.id = c.getLong(c.getColumnIndex(ALARM_FIELDS[0]));
-        model.classId = c.getLong(c.getColumnIndex(ALARM_FIELDS[1]));
-        model.name = c.getString(c.getColumnIndex(ALARM_FIELDS[2]));
-        model.timeHour = c.getInt(c.getColumnIndex(ALARM_FIELDS[3]));
-        model.timeMinute = c.getInt(c.getColumnIndex(ALARM_FIELDS[4]));
-        model.repeatingDays = c.getString(c.getColumnIndex(ALARM_FIELDS[5]));
-        model.repeatWeekly = c.getInt(c.getColumnIndex(ALARM_FIELDS[6]));
-        model.isEnabled = c.getInt(c.getColumnIndex(ALARM_FIELDS[7]));
-        model.isAfterClass = c.getInt(c.getColumnIndex(ALARM_FIELDS[8]));
-        model.day = c.getInt(c.getColumnIndex(ALARM_FIELDS[9]));
-
-        return model;
-    }
 
 
 //    public long updateAlarm(AlarmModel model) {
-//        ContentValues values = populateContent(model);
+    //        ContentValues values = populateContent(model);
 //        return getWritableDatabase().update(Alarm.ALARM_TABLE_NAME, values, Alarm._ID + " = ?", new String[]{String.valueOf(model.id)});
 //    }
 //
@@ -175,32 +147,14 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(select, null);
 
         if (c.moveToNext()) {
-            return populateModel(c);
+            return new AlarmModel(c);
         }
 
         Log.i(TAG, "ALARM ID RETURNED NOTHING");
         return null;
     }
 
-    public List<AlarmModel> getAlarms() {
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        String select = "SELECT * FROM " + ALARM_TABLE_NAME;
-
-        Cursor c = db.rawQuery(select, null);
-
-        List<AlarmModel> alarmList = new ArrayList<AlarmModel>();
-
-        while (c.moveToNext()) {
-            alarmList.add(populateModel(c));
-        }
-
-        if (!alarmList.isEmpty()) {
-            return alarmList;
-        }
-
-        return null;
-    }
 //
 //    public int deleteAlarm(long id) {
 //        return getWritableDatabase().delete(Alarm.ALARM_TABLE_NAME, Alarm._ID + " = ?", new String[]{String.valueOf(id)});

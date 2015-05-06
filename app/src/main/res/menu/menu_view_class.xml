@@ -8,13 +8,6 @@
         app:showAsAction="ifRoom"/>
 
 
-
-    <item android:id="@+id/add_an_alarm"
-        android:icon="@mipmap/ic_alarm"
-        android:title="Add an Alarm"
-        app:showAsAction="ifRoom" />
-
-
     <!-- Add A Class Button -->
     <item android:id="@+id/add_a_class"
         android:icon="@mipmap/ic_add"
