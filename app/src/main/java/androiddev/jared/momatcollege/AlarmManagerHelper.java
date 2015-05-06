@@ -9,8 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 
 public class AlarmManagerHelper extends BroadcastReceiver {
@@ -19,13 +18,11 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // setAlarms(context);
+
     }
 
     //set the next alarm
     public static void setAlarm(Context context, long alarmId) {
-
-        //cancelAlarm(context);
 
         Log.i(TAG, "alarm id = " + alarmId);
 
@@ -40,19 +37,10 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         nextAlarm.set(Calendar.MINUTE, alarm.timeMinute);
         nextAlarm.set(Calendar.DAY_OF_WEEK, alarm.day);
 
-        DateFormat TBF = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-        String BRUH = TBF.format(nextAlarm.getTime());
-//        Log.i(TAG, "Pending Intent set for " + BRUH );
-
-        Log.i(TAG, "alarm.day = " + alarm.day );
-        Log.i(TAG, "mCal = " + mCal.get(Calendar.DAY_OF_WEEK));
-
+        //if alarm is for next week add a week in milliseconds to the date
         if( alarm.day < mCal.get(Calendar.DAY_OF_WEEK )){
             nextAlarm.setTimeInMillis(nextAlarm.getTimeInMillis() + (86400 * 7 * 1000) );
         }
-
-//        BRUH = TBF.format(nextAlarm.getTime());
-//        Log.i(TAG, "Pending Intent set for " + BRUH );
 
         //create pending intent for alarm
         PendingIntent pIntent = createPendingIntent(context, alarm);
@@ -60,28 +48,10 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlarm.getTimeInMillis(), pIntent);
 
-        BRUH = TBF.format(nextAlarm.getTime());
-        Log.i(TAG, "Pending Intent set for " + BRUH );
-
     }
 
 
-
-//    public static void cancelAlarm(Context context) {
-//
-//        long cancelAlarmId = findNextAlarm(context);
-//
-//        ClassDbHelper dbHelper = new ClassDbHelper(context);
-//        AlarmModel alarm = dbHelper.getAlarm(cancelAlarmId);
-//
-//        PendingIntent pIntent = createPendingIntent(context, alarm);
-//
-//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        alarmManager.cancel(pIntent);
-//
-//    }
-
-
+    //creates a pending intent for each alarm
     private static PendingIntent createPendingIntent(Context context, AlarmModel alarm) {
         Intent intent = new Intent(context, AlarmService.class);
 
@@ -96,7 +66,8 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    //returns -1 on
+
+    //finds the next alarm that needs to be set (next chronological alarm)
     public static long getNextAlarmId(Context context) {
         Calendar mCal = Calendar.getInstance();
         for ( int i=0; i<7; i++ ) {
@@ -119,7 +90,6 @@ public class AlarmManagerHelper extends BroadcastReceiver {
             long timeDiff = 600000000;
             long currentClosestAlarmId = -1;
 
-            int alarmsChecked = 0;
             for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
 
                 long compareVal = 0;
@@ -150,7 +120,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         return -1;
     }
 
-    //convert from the the AddClass order to Calendar object order
+    //convert day_of_week enum from the AddClass order to Calendar object order
     public static int convertDayToCal( int calendarDay ) {
         switch (calendarDay) {
             case 0:

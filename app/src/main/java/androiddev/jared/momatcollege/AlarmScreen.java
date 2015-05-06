@@ -2,9 +2,6 @@ package androiddev.jared.momatcollege;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ public class AlarmScreen extends Activity {
     public final String TAG = this.getClass().getSimpleName();
 
     private PowerManager.WakeLock mWakeLock;
-    private MediaPlayer mPlayer;
 
     private static final int WAKELOCK_TIMEOUT = 60 * 1000;
 
@@ -46,28 +42,10 @@ public class AlarmScreen extends Activity {
 
             @Override
             public void onClick(View view) {
-                mPlayer.stop();
                 finish();
             }
         });
 
-        //Play alarm tone
-        mPlayer = new MediaPlayer();
-        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-
-
-        //TODO make this a real sound
-        if(alert == null){
-            // alert is null, using backup
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-
-            // I can't see this ever being null (as always have a default notification)
-            // but just incase
-            if(alert == null) {
-                // alert backup is null, using 2nd backup
-                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-        }
 
         //Ensure wakelock release
         Runnable releaseWakelock = new Runnable() {
