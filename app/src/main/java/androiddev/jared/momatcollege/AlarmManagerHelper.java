@@ -2,7 +2,6 @@ package androiddev.jared.momatcollege;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,14 +11,9 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-public class AlarmManagerHelper extends BroadcastReceiver {
+public class AlarmManagerHelper {
 
     public static String TAG = AlarmManagerHelper.class.getSimpleName();
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-
-    }
 
     //set the next alarm
     public static void setAlarm(Context context, long alarmId) {

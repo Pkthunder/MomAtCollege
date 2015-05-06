@@ -46,14 +46,6 @@
         <service android:name=".AlarmService" android:enabled="true"/>
         <service android:name=".FloatingPromptService" android:enabled="true"/>
 
-        <reciever
-            android:name=".AlarmManagerHelper"
-            android:process=":remote" >
-            <intent-filter>
-                <action android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-            </intent-filter>
-        </reciever>
-
         <activity
             android:name=".AlarmScreen"
             android:label="@string/title_activity_alarm_screen" >
