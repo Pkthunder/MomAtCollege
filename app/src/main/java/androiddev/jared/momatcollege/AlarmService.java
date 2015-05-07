@@ -25,40 +25,32 @@ public class AlarmService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+        //get id of alarm to go off
         long ala_id = intent.getLongExtra("id", -1);
-        Log.i(TAG, "alarm ID = " + ala_id);
-
 
         ClassDbHelper dbHelper = new ClassDbHelper(getApplicationContext());
         AlarmModel newAlarm = dbHelper.getAlarm(ala_id);
 
-        Log.i(TAG, "isEnabled = " + newAlarm.isEnabled );
-        Log.i(TAG, "isAfterClass = " + newAlarm.isAfterClass );
-
-
+        //check if the alarm should go off
         if(newAlarm.isEnabled == 1) {
+            //check if it is an after class
             if(newAlarm.isAfterClass == 1) {
 
-                //TODO KYLE put the location check here
-                //AlarmScreen.class should be addTask dialog
-//                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
-//                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                alarmIntent.putExtras(intent);
-//                getApplication().startActivity(alarmIntent);
+                //KYLE put the location check here
                 long classId = intent.getLongExtra("classId", -1);
                 if ( classId == -1 ) {
-                    Log.i(TAG, "Internal Error, no classId: " + String.valueOf(classId));
                     Toast.makeText(getApplicationContext(), "Internal Error, no classId", Toast.LENGTH_LONG).show();
                     return super.onStartCommand(intent, flags, startId);
                 }
 
+                //start the alert to have the user add a task after class
                 Intent floatingPrompt = new Intent(this, FloatingPromptService.class);
                 floatingPrompt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 floatingPrompt.putExtra("classId",classId);
                 getApplication().startService(floatingPrompt);
                 return super.onStartCommand(intent, flags, startId);
             }
-            else{
+            else{ //start the alarm to tell the user to go to class
                 Intent alarmIntent = new Intent(getBaseContext(), AlarmScreen.class);
                 alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 alarmIntent.putExtras(intent);
@@ -66,24 +58,29 @@ public class AlarmService extends Service {
 
                 Context context = getApplicationContext();
 
+                //start a pending intent 30 minutes in the future
                 Calendar mCal = Calendar.getInstance();
                 mCal.setTimeInMillis(mCal.getTimeInMillis() + (30 * 60 *1000) );
 
                 PendingIntent pIntent = createPendingIntent(context, newAlarm.classId);
 
+                //actually sets the 'alarm' (included as a location checker)
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, mCal.getTimeInMillis(), pIntent);
+                //commented out because location not fully implemented
+                //alarmManager.set(AlarmManager.RTC_WAKEUP, mCal.getTimeInMillis(), pIntent);
 
 
             }
         }
 
+        //sets the next class alarm that will go off (before or after class)
         long nextAlarmId = AlarmManagerHelper.getNextAlarmId(getApplicationContext());
         AlarmManagerHelper.setAlarm(getApplicationContext(), nextAlarmId);
 
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+    //makes the pending intent for the location services
     private static PendingIntent createPendingIntent(Context context, long classID) {
         //Intent mIntent = new Intent(context, ProxAlertHelper.class);
         Intent mIntent = new Intent(context, AlarmService.class);

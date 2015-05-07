@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 public class AlarmModel {
 
+    //all alarm attributes
 	public long id = -2;
 	public int timeHour;
 	public int timeMinute;
@@ -15,6 +16,7 @@ public class AlarmModel {
     public int isAfterClass;
     public int day;
 
+    //constructor for the class
     public AlarmModel(Cursor c){
         id = c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[0]));
         classId = c.getLong(c.getColumnIndex(ClassDbHelper.ALARM_FIELDS[1]));
