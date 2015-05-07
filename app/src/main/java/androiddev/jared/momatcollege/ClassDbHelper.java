@@ -9,20 +9,27 @@ import android.util.Log;
 
 
 /**
- * This class simply is a Class Db Table Help Object
+ * This class simply is an custom extension of SQLiteOpenHelper
+ * It contains functions and static strings to access our database
  */
 public class ClassDbHelper extends SQLiteOpenHelper {
 
+    //Tag for Log.i calls
     public static String TAG = ClassDbHelper.class.getSimpleName();
+
+    //Statics to identify our database
     private static final int DB_VERSION = 6;
     public static final String DB_NAME = "MomAtCollegeDb";
 
     //////////////////////////////////////////////////////////////////  Class Table ///////////////////////////////////////////////////////////////////////
     public static final String CLASS_TABLE_NAME = "classDb";
+
+    //List of all data fields inside table
     public static final String[] CLASS_FIELDS = {"id", "class_name", "location", "teacher_name", //0-3
             "teacher_notes", "frequency", "start_date_time", "end_date_time", "class_type", //4-8
             "auto_alarms_bool", "calEventId", "missClassCount", "leftEarlyCount", "longitude", "latitude"}; //9-14
 
+    //Query to be run to create table
     private static final String CLASS_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE_NAME + " (" +
                     CLASS_FIELDS[0] + " INTEGER PRIMARY KEY, " +
@@ -41,13 +48,14 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     CLASS_FIELDS[13] + " DOUBLE NOT NULL, " +
                     CLASS_FIELDS[14] + " DOUBLE NOT NULL );";
 
+    //Static Strings designed to be used in Db.rawQuery() calls
     public static final String CLASS_SELECT_ALL = "SELECT * FROM " + CLASS_TABLE_NAME;
     public static String classSelectById( int classId ) {
         return "SELECT * FROM " + CLASS_TABLE_NAME + " WHERE id='" + classId + "'";
     }
 
+    //Two helper functions for DateTime string formatting
     public static String formatDaysOfWeek( String daysOfWeek ) {
-        //String[] weekday_key = {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
         String result = "";
 
         if (daysOfWeek.length() < 4) {
@@ -64,17 +72,19 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         }
         return result;
     }
-
     public static String formatTime( String datetime ) {
-        //returns HH:mm
+        //returns HH:mm format
         return datetime.split(" ")[1].substring(0,5);
     }
 
     //////////////////////////////////////////////////////////////////  Task Table ///////////////////////////////////////////////////////////////////////
     public static final String TASK_TABLE_NAME = "taskDb";
+
+    //List of all data fields inside table
     public static final String[] TASK_FIELDS = {"id", "classId", "task_type", "task_name",
             "task_notes", "due_date_time", "task_complete_bool", "calEventId"};
 
+    //Query to be run to create table
     private static final String TASK_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + TASK_TABLE_NAME + " (" +
                     TASK_FIELDS[0] + " INTEGER PRIMARY KEY, " +
@@ -86,6 +96,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     TASK_FIELDS[6] + " tinyint(1) NOT NULL, " +
                     TASK_FIELDS[7] + " BIGINT NOT NULL);";
 
+    //Static Strings designed to be used in Db.rawQuery() calls
     public static final String TASK_SELECT_ALL = "SELECT * FROM " + TASK_TABLE_NAME;
     public static String taskSelectById( int classId ) {
         return "SELECT * FROM " + TASK_TABLE_NAME + " WHERE classId='" + classId + "'";
@@ -94,10 +105,12 @@ public class ClassDbHelper extends SQLiteOpenHelper {
     //////////////////////////////////////////////////////////////////  Alarm Table ///////////////////////////////////////////////////////////////////////
 
     public static final String ALARM_TABLE_NAME = "alarmDb";
+
+    //List of all data fields inside table
     public static final String[] ALARM_FIELDS = {"id", "classId", "alarm_name", "alarm_time_hour", //0-3
             "alarm_time_minute", "alarm_repeat_days", "alarm_repeat_weekly", "alarm_enabled", "alarm_isAfterClass", "alarm_day"}; //4-9
 
-
+    //Query to be run to create table
     private static final String ALARM_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + ALARM_TABLE_NAME + " (" +
                     ALARM_FIELDS[0] + " INTEGER PRIMARY KEY," +
@@ -113,10 +126,12 @@ public class ClassDbHelper extends SQLiteOpenHelper {
                     " );";
 
 
+    //Constructor required by SQLiteOpenHelper
     ClassDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    //Overwritten methods from SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CLASS_TABLE_CREATE);
@@ -132,13 +147,7 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
-
-//    public long updateAlarm(AlarmModel model) {
-    //        ContentValues values = populateContent(model);
-//        return getWritableDatabase().update(Alarm.ALARM_TABLE_NAME, values, Alarm._ID + " = ?", new String[]{String.valueOf(model.id)});
-//    }
-//
+    //accesses alarm table and returns the alarm with a specific id
     public AlarmModel getAlarm(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -153,11 +162,5 @@ public class ClassDbHelper extends SQLiteOpenHelper {
         Log.i(TAG, "ALARM ID RETURNED NOTHING");
         return null;
     }
-
-
-//
-//    public int deleteAlarm(long id) {
-//        return getWritableDatabase().delete(Alarm.ALARM_TABLE_NAME, Alarm._ID + " = ?", new String[]{String.valueOf(id)});
-//    }
 
 }

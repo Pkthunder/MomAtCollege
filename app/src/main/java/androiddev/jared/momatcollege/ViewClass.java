@@ -45,6 +45,7 @@ public class ViewClass extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_class);
 
+        //retrieves the desired classId for database query
         Intent currIntent = getIntent();
         final int classId = currIntent.getIntExtra("classId", 0);
         if ( classId == 0 ) {
@@ -61,8 +62,12 @@ public class ViewClass extends ActionBarActivity {
         showTeacherNotes = (Button) findViewById(R.id.teacher_notes_btn);
         saveClassLocation = (Button) findViewById(R.id.save_location);
 
+        //initialize instance of LocationManager
         locMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        //Click handler for Save Location button
+        //stores user's current location to be used as a baseline
+        //for later location comparisons
         saveClassLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +77,8 @@ public class ViewClass extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "No last known location. ", Toast.LENGTH_LONG).show();
                     return;
                 }
+                //gets instance of writable database
+                //trys to update the longitude and latitude of the current class
                 ClassDbHelper mDbHelper = new ClassDbHelper(getApplicationContext());
                 SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
 
@@ -92,19 +99,16 @@ public class ViewClass extends ActionBarActivity {
         });
 
         lv = (ListView) findViewById(R.id.class_info_list);
-
-        //TESTING
-        //Intent currIntent = getIntent();
-        //int classId = currIntent.getIntExtra("classId", 0);
-        //Log.i("VIEWCLASS", String.valueOf(classId));
-        //Intent intent = new Intent(getApplicationContext(), FloatingPromptService.class);
-        //intent.putExtra("classId",classId);
-        //startService(intent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        //populates all class data Text Views AND
+        //populates list view of all current tasks assigned to the current classId
+        //data is retrieved from database query
+        //this is done in onResume to ensure the most recent data
 
         //Gets the classId passed to Activity by the intent
         Intent intent = getIntent();
@@ -114,11 +118,12 @@ public class ViewClass extends ActionBarActivity {
             finish();
         }
 
-        //Gets data from database
+        //Gets class data from database, by using the classId by through the intent
         if (!getClassDatabaseData(classId)) {
             Toast.makeText(getApplicationContext(), "Error Loading Data...", Toast.LENGTH_LONG).show();
         }
-        //TODO: Finish implementation of task list
+
+        //gets all tasks data from database assigned to the current classId
         getTaskDatabaseData(classId);
     }
 
@@ -152,6 +157,7 @@ public class ViewClass extends ActionBarActivity {
         }
     }
 
+    //Navigation Functions
     public void addAClass(){
         //DONE: Intent to navigate to add a class
         Intent intent = new Intent(ViewClass.this, AddClass.class);
@@ -183,6 +189,7 @@ public class ViewClass extends ActionBarActivity {
 
     }
 
+    //retrieves all class data from database with the corresponding classId
     private boolean getClassDatabaseData(int classId) {
         ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
         SQLiteDatabase mDb = mHelper.getWritableDatabase();
@@ -236,6 +243,7 @@ public class ViewClass extends ActionBarActivity {
         return true;
     }
 
+    //retrieves all tasks (and data) that are assigned to the current classId
     private boolean getTaskDatabaseData( int classId ) {
         ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
         SQLiteDatabase mDb = mHelper.getWritableDatabase();
@@ -261,6 +269,7 @@ public class ViewClass extends ActionBarActivity {
 
                     c.moveToPosition(position);
 
+                    //code below always threw an exception, unsure why....
                     /*
                     DateFormat dateFromDb = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     DateFormat dateToDisplay = new SimpleDateFormat("MMM dd, yyyy at HH:mm");

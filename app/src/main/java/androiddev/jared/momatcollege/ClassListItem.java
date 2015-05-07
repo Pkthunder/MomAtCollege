@@ -4,6 +4,8 @@ package androiddev.jared.momatcollege;
  * Created by Jared on 4/19/2015.
  * Class Item for Custom List Adapter
  */
+//Not much to say about this class. It's simple a ListView that displays 2 strings
+//instead of 1 like the default ListView
 public class ClassListItem {
 
     private final String className;

@@ -45,6 +45,7 @@ public class FloatingPromptService extends Service {
     //WindowManager -> outerMost -> innerLayout -> mTV && (buttonLayout -> 2xButtons)
     //mWM, innerLayout, and buttonLayout have corresponding params objects
     //outerMost was added to allow for both innerLayout and mWM params to co-exist
+    //(mWM params are added when outerMost is added to the mWM instance)
     //outerMost is also used to hack-ily add a border
 
     @Override
@@ -57,8 +58,10 @@ public class FloatingPromptService extends Service {
     public void onCreate() {
         Log.i(TAG, "Entered onCreate");
 
+        //initialize WindowManager instance
         mWM = (WindowManager) getSystemService(WINDOW_SERVICE);
 
+        //initialize TextView to be displayed
         mTV = new TextView(this);
         mTV.setText("MomAtCollege: End of Class!");
         mTV.setBackgroundColor(Color.rgb(35, 69, 35));
@@ -66,11 +69,16 @@ public class FloatingPromptService extends Service {
         mTV.setTextSize(22);
         mTV.setGravity(Gravity.CENTER);
 
+        //initialize outer most linear layout
+        //used for a hacky border and
+        //allows both inner and window manager params to both exist
         outerMost = new LinearLayout(this);
         outerMost.setOrientation(LinearLayout.VERTICAL);
         outerMost.setBackgroundColor(Color.parseColor("#00FF00"));
         outerMost.setPadding(8, 8, 8, 8);
 
+        //initialize inner layout and layout params
+        //contains both the TextView and the Button Layout
         innerLayout = new LinearLayout(this);
         innerLayout.setOrientation(LinearLayout.VERTICAL);
         innerLayout.setBackgroundColor(Color.rgb(35, 69, 35));
@@ -80,6 +88,9 @@ public class FloatingPromptService extends Service {
         );
         innerLayout.setPadding(0, 0, 0, 15);
 
+        //initialize button layout and layout params
+        //contains both cancel and add task buttons
+        //contained within inner layout
         buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
@@ -88,6 +99,7 @@ public class FloatingPromptService extends Service {
                 LinearLayout.LayoutParams.MATCH_PARENT
         );
 
+        //initializes add task button and layout params
         addTask = new Button(this);
         addTask.setText("Add Task");
         addTask.setGravity(Gravity.CENTER);
@@ -97,6 +109,7 @@ public class FloatingPromptService extends Service {
                 .4f
         );
 
+        //initializes add cancel and layout params
         cancel = new Button(this);
         cancel.setText("Cancel");
         cancel.setGravity(Gravity.CENTER);
@@ -106,14 +119,20 @@ public class FloatingPromptService extends Service {
                 .4f
         );
 
+        //add the buttons to the button layout
         buttonLayout.addView(cancel, cancelParams);
         buttonLayout.addView(addTask, addTaskParams);
 
+        //add the TextView and Button layout to the inner layout
         innerLayout.addView(mTV);
         innerLayout.addView(buttonLayout, buttonLayoutParams);
 
+        //add the inner layout to the out layout
+        //this is where the inner layout params are added
         outerMost.addView(innerLayout, innerParams);
 
+        //create instance of WindowManager Params
+        //then add params to the param object
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -126,21 +145,29 @@ public class FloatingPromptService extends Service {
         params.x = 0;
         params.y = 0;
 
+        //add the outer layout to the window manager
+        //WindowManager Params are added here
         mWM.addView(outerMost, params);
+
+        //used to prevent duplicate FloatingPrompts
+        bActive = true;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        Log.i(TAG, "Entered onCreate");
 
+        //retrieve the classId from the intent
         final long classId = intent.getLongExtra("classId", 0);
-        Log.i(TAG, "classId: " + String.valueOf(classId));
 
+        //error checking - prevents display if
+        //there is already an active FloatingPrompt
+        //if the classId failed to be passed
         if (bActive || classId == 0) {
             Log.i(TAG, "Returned Early --- ERROR");
             this.stopSelf();
         }
 
+        //stores classId within object
         mClassId = classId;
 
         //Vibrate Code
@@ -156,6 +183,8 @@ public class FloatingPromptService extends Service {
             e.printStackTrace();
         }
 
+        //add task button click handler
+        //navigates to the AddTask Activity
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +196,8 @@ public class FloatingPromptService extends Service {
             }
         });
 
+        //cancel button click handler
+        //removes the FloatingPrompt from the screen
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,19 +205,28 @@ public class FloatingPromptService extends Service {
             }
         });
 
-        bActive = true;
-
+        //service will persist after app process is ended
+        //system will re-start the service and re-send the initial
+        //intent, so the classId can be retrieved
         return START_REDELIVER_INTENT;
-        //return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        //removes all current views from WindowManager instance
         if (outerMost != null) {
+            buttonLayout.removeView(cancel);
+            buttonLayout.removeView(addTask);
+            innerLayout.removeView(buttonLayout);
+            innerLayout.removeView(mTV);
+            outerMost.removeView(innerLayout);
             mWM.removeView(outerMost);
         }
 
+        //Create notification after user clicks on FloatingPrompt
+        //both buttons end the service, therefore this will be called
         if ( mClassId != 0 ) {
             //Create Notification
             NotificationCompat.Builder builder =  new NotificationCompat.Builder(this)
@@ -209,8 +249,7 @@ public class FloatingPromptService extends Service {
         }
     }
 
-    public boolean isbActive() { return bActive; }
-
+    //ends the service
     final void stopThisNonSense() {
         bActive = false;
         this.stopSelf();

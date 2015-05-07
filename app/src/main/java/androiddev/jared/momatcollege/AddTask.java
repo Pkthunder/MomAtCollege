@@ -64,14 +64,17 @@ public class AddTask extends ActionBarActivity {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get writable database
                 SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
 
+                //validate user input, true if valid
                 if ( !addDatabaseEntry(values) ) {
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 }
                 else {
-
+                    //create instance of GoogleCalendarHelper to store data into calendar content provider
+                    //creates an event that will represent the task the user is entering
                     GoogleCalendarHelper mHelper = new GoogleCalendarHelper();
                     ContentResolver cr = getContentResolver();
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -81,17 +84,22 @@ public class AddTask extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Internal Error, Please Restart App", Toast.LENGTH_LONG).show();
                         finish();
                     }
+                    //get the current locale of the user
                     Intent currIntent = getIntent();
                     String locale = currIntent.getStringExtra("classLocale");
                     String weekDay = mDueDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US);
+                    //adds class data to calendar content provider
                     long calEventId = mHelper.createNewEventOnCalendar(getApplicationContext(), cr, mDueDate, null,
                             weekDay, values.getAsString(ClassDbHelper.TASK_FIELDS[3]), locale, savedCalId);
+                    //adds newly create event id to database
                     values.put(ClassDbHelper.TASK_FIELDS[7], calEventId);
 
+                    //adds all task data to database
                     long newRowId = mDb.insert(ClassDbHelper.TASK_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
 
+                    //clears notification if one exists (after FloatingPrompt triggers one)
                     NotificationManager mNotMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     mNotMgr.cancel(2345);
 
@@ -132,6 +140,7 @@ public class AddTask extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //establishes the Date/Time dialog pickers
     private void setUpDateTimeDialog() {
         Calendar mCalendar = Calendar.getInstance();
         dueDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -172,10 +181,10 @@ public class AddTask extends ActionBarActivity {
         });
     }
 
+    //validates user's input, returns true if valid
+    //and populates a ContentValues object to be
+    //eventually stored in our database
     private boolean addDatabaseEntry(ContentValues values) {
-
-        /*{"id", "classId", "task_type", "task_name",
-            "task_notes", "due_date_time", "task_complete_bool"};*/
 
         //Class Id
         Intent currIntent = getIntent();

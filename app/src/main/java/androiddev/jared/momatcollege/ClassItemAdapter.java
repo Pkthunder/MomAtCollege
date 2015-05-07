@@ -13,6 +13,9 @@ import java.util.ArrayList;
  * Created by Jared on 4/19/2015.
  * Custom Adapter to display multiple items in our list view
  */
+
+//Not much to say about this class. It's simple a ListView that displays 2 strings
+//instead of 1 like the default ListView
 public class ClassItemAdapter extends ArrayAdapter<ClassListItem> {
     private final Context context;
     private final ArrayList<ClassListItem> classArrayList;

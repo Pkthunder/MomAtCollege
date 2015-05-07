@@ -97,12 +97,18 @@ public class AddClass extends ActionBarActivity {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //create Database instance
                 SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
                 ContentValues alarmValues = new ContentValues();
+
+                //validates data user entered
                 if ( !addDatabaseEntry(values) ) {
+                    //alerts user of error if there is one
                     Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                 } else {
+                    //create event in calendar provider using
+                    //GoogleCalendarHelper methods
                     GoogleCalendarHelper mHelper = new GoogleCalendarHelper();
                     ContentResolver cr = getContentResolver();
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -117,12 +123,13 @@ public class AddClass extends ActionBarActivity {
                             values.getAsString(ClassDbHelper.CLASS_FIELDS[1]),
                             values.getAsString(ClassDbHelper.CLASS_FIELDS[2]),
                             savedCalId);
+                    //adds the newly created calendar event id to the classDb content value object
                     values.put(ClassDbHelper.CLASS_FIELDS[10], calEventId);
 
+                    //inserts all class data into database
                     long newRowId = mDb.insert(ClassDbHelper.CLASS_TABLE_NAME, null, values);
                     //just using errorMsg variable, there is no error
                     Toast.makeText(getApplicationContext(), errorMsg + " (id:" + newRowId + ") Successfully Added!", Toast.LENGTH_LONG).show();
-
 
                     //adds the alarm
                     addAlarmDatabaseEntry(alarmValues, newRowId, 0);
@@ -130,8 +137,6 @@ public class AddClass extends ActionBarActivity {
 
                     addAlarmDatabaseEntry(alarmValues, newRowId, 1);
                     multipleInsert(alarmValues);
-
-
 
                     long nextAlarmId = AlarmManagerHelper.getNextAlarmId(getApplicationContext());
                     Log.i(TAG,"nextAlarmId = " + nextAlarmId);
@@ -185,6 +190,7 @@ public class AddClass extends ActionBarActivity {
         }
     }
 
+    //sets the click handlers to the weekday text views
     private void setWeekdayPicker() {
         weekdayBorder = getResources().getDrawable(R.drawable.text_view_border);
 
@@ -244,16 +250,9 @@ public class AddClass extends ActionBarActivity {
                 weekdaySelections[6] = !(weekdaySelections[6]);
             }
         });
-
-       /* toggleWeekdayClick(mMonPicker);
-        toggleWeekdayClick(mTuePicker);
-        toggleWeekdayClick(mWedPicker);
-        toggleWeekdayClick(mThrPicker);
-        toggleWeekdayClick(mFriPicker);
-        toggleWeekdayClick(mSatPicker);
-        toggleWeekdayClick(mSunPicker); */
     }
 
+    //establishes date picker dialog and click listener for Start and End Date
     private void setDateDialogs() {
         //Establishes a date picker dialog
         Calendar mCalendar = Calendar.getInstance();
@@ -296,6 +295,7 @@ public class AddClass extends ActionBarActivity {
         });
     }
 
+    //establishes time picker dialog and click listener for Start and End Time
     private void setTimeDialogs() {
         //Establishes a time picker dialog
         Calendar mCalendar = Calendar.getInstance();
@@ -336,6 +336,9 @@ public class AddClass extends ActionBarActivity {
         });
     }
 
+    //validates user's input, returns true if valid
+    //and populates a ContentValues object to be
+    //eventually stored in our database
     private boolean addDatabaseEntry( ContentValues values ) {
 
         //Class Name
@@ -427,7 +430,8 @@ public class AddClass extends ActionBarActivity {
         return true;
     }
 
-
+    //converts user data to be stored in our alarm table,
+    //which stores the automatic alarms to remind user of upcoming classes
     private boolean addAlarmDatabaseEntry( ContentValues alarmValues, long classId, int isAfterClass ){
 
         //class ID

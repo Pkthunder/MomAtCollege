@@ -45,6 +45,8 @@ public class MainActivity extends ActionBarActivity {
         });
 
         Button view_schedule_button = (Button) findViewById(R.id.view_schedule);
+        //View Schedule Click Handler
+        //navigates user to the stock calendar app to view the current day
         view_schedule_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -60,6 +62,9 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        //checks if a calendar id is stored inside Shared Preferences
+        //if none exists, we assume user has no MomAtCollege local calendar
+        //and one is created through GoogleCalendarHelper class
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         long savedCalId = settings.getLong("calId", -1);
 
@@ -80,6 +85,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        //populates list view of all current classes
+        //data is retrieved from database query
+        //this is done in onResume to ensure the most recent data
 
         lv = (ListView) findViewById(R.id.class_list);
         ArrayList<ClassListItem> classList = new ArrayList<ClassListItem>();
@@ -141,6 +150,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    //Navigation Functions
     public void addAClass(){
         Intent intent = new Intent(MainActivity.this, AddClass.class);
         startActivity(intent);
@@ -157,6 +167,7 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    //Queries the database for all class data available and displays it in a list view
     private boolean populateListView(ArrayList<ClassListItem> classList) {
         ClassDbHelper mHelper = new ClassDbHelper(getApplicationContext());
         SQLiteDatabase mDb = mHelper.getWritableDatabase();

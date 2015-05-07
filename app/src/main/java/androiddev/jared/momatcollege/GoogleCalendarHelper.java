@@ -18,10 +18,14 @@ import java.util.TimeZone;
 public class GoogleCalendarHelper {
     //private static final String TAG = GoogleCalendarHelper.class.getSimpleName();
 
+    //Static strings to identify
     private static final String GCH_ACCOUNT_NAME = "androiddev.jared.momatcollege";
     private static final String GCH_CAL_NAME = "MomAtCollege Calendar";
     private static final String GCH_OWNER_ACC = "jared_perreault@yahoo.com";
 
+
+    //creates a local calendar on the user's phone
+    //returns the calendar id
     public long createCalendar(ContentResolver cr) {
         ContentValues values = new ContentValues();
 
@@ -48,6 +52,7 @@ public class GoogleCalendarHelper {
         return eventId;
     }
 
+    //adds an event to the local calendar our app has created (in createCalendar())
     public long createNewEventOnCalendar(Context context, ContentResolver cr, Calendar startDateTime, Calendar endDateTime,
                                     String daysOfWeek, String nameOfEvent, String locOfEvent, long savedCalId) {
 
